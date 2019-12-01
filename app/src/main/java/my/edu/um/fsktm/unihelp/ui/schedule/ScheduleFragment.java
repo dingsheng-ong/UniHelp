@@ -11,14 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import my.edu.um.fsktm.unihelp.R;
-import my.edu.um.fsktm.unihelp.util.RandomIconGenerator;
 
 public class ScheduleFragment extends Fragment {
 
@@ -37,20 +35,29 @@ public class ScheduleFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        List<Item> database = queryListOfLocation();
+        List<Item> database = queryListOfItems();
         adapter = new ItemAdapter(getContext(), database);
         recyclerView.setAdapter(adapter);
 
         return view;
     }
 
-    private List<Item> queryListOfLocation() {
+    private List<Item> queryListOfItems() {
         // TO-DO: query db
         List<Item> database = new ArrayList<>();
         database.add(new Item(
+                "divider",
+                "25th",
+                "",
+                new Timestamp(new GregorianCalendar(2019,12,1,16,0).getTimeInMillis()),
+                new Timestamp(new GregorianCalendar(2019,12,1,17,0).getTimeInMillis()),
+                "",
+                ""
+        ));
+        database.add(new Item(
                 "class",
                 "WIX3004 Mobile Application Development - Lecture",
-                "Class!",
+                "",
                 new Timestamp(new GregorianCalendar(2019,12,1,16,0).getTimeInMillis()),
                 new Timestamp(new GregorianCalendar(2019,12,1,17,0).getTimeInMillis()),
                 "DK1, FSKTM",
@@ -59,20 +66,48 @@ public class ScheduleFragment extends Fragment {
         database.add(new Item(
                 "class",
                 "WIX3004 Mobile Application Development - Lab",
-                "Class!",
+                "",
                 new Timestamp(new GregorianCalendar(2019,12,1,16,0).getTimeInMillis()),
                 new Timestamp(new GregorianCalendar(2019,12,1,17,0).getTimeInMillis()),
                 "DK1, FSKTM",
                 "Dr. Ong Sim Ying"
         ));
         database.add(new Item(
+                "divider",
+                "26th",
+                "",
+                new Timestamp(new GregorianCalendar(2019,12,1,16,0).getTimeInMillis()),
+                new Timestamp(new GregorianCalendar(2019,12,1,17,0).getTimeInMillis()),
+                "",
+                ""
+        ));
+        database.add(new Item(
                 "event",
                 "Industrial Training Talk 2019/2020",
-                "Class!",
+                "EVERY SINGLE STUDENT MUST JOIN or cannot graduate!!!!!!",
                 new Timestamp(new GregorianCalendar(2019,12,1,16,0).getTimeInMillis()),
                 new Timestamp(new GregorianCalendar(2019,12,1,17,0).getTimeInMillis()),
                 "The Cube, FSKTM",
                 null
+        ));
+        database.add(new Item(
+                "booking",
+                "",
+                "",
+                new Timestamp(new GregorianCalendar(2019,12,1,16,0).getTimeInMillis()),
+                new Timestamp(new GregorianCalendar(2019,12,1,17,0).getTimeInMillis()),
+                "Student Center's Discussion Room",
+                null
+        ));
+        // ADD EMPTY SPACE AT END
+        database.add(new Item(
+                "divider",
+                "",
+                "",
+                new Timestamp(new GregorianCalendar(2019,12,1,16,0).getTimeInMillis()),
+                new Timestamp(new GregorianCalendar(2019,12,1,17,0).getTimeInMillis()),
+                "",
+                ""
         ));
         return database;
     }

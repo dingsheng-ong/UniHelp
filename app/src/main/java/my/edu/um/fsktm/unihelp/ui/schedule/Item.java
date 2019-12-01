@@ -15,7 +15,7 @@ public class Item implements Serializable {
     private final String lecturer;
 
     public Item(
-        String type, // booking, event, class
+        String type, // booking, event, class, divider
         String title,
         String description,
         Timestamp timeStart,
