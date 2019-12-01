@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_courses"
-        android:name="my.edu.um.fsktm.unihelp.ui.CoursesFragment"
+        android:name="my.edu.um.fsktm.unihelp.ui.course.CoursesFragment"
         android:label="@string/bn_courses"
         tools:layout="@layout/courses_fragment" />
 

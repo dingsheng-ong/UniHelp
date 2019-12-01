@@ -68,6 +68,54 @@ public class ReservationFragment extends Fragment {
                 25,
                 RandomIconGenerator.getResId("DK1")
         ));
+        database.add(new Location(
+                "MM1",
+                "Makmal Mikro 1",
+                "Faculty of Computer Science and Information Technology",
+                4.2,
+                104,
+                RandomIconGenerator.getResId("MM1")
+        ));
+        database.add(new Location(
+                "MM2",
+                "Makmal Mikro 2",
+                "Faculty of Computer Science and Information Technology",
+                4.4,
+                120,
+                RandomIconGenerator.getResId("MM2")
+        ));
+        database.add(new Location(
+                "DK1",
+                "Lecture Hall 1",
+                "Faculty of Computer Science and Information Technology",
+                2.4,
+                25,
+                RandomIconGenerator.getResId("DK1")
+        ));
+        database.add(new Location(
+                "MM1",
+                "Makmal Mikro 1",
+                "Faculty of Computer Science and Information Technology",
+                4.2,
+                104,
+                RandomIconGenerator.getResId("MM1")
+        ));
+        database.add(new Location(
+                "MM2",
+                "Makmal Mikro 2",
+                "Faculty of Computer Science and Information Technology",
+                4.4,
+                120,
+                RandomIconGenerator.getResId("MM2")
+        ));
+        database.add(new Location(
+                "DK1",
+                "Lecture Hall 1",
+                "Faculty of Computer Science and Information Technology",
+                2.4,
+                25,
+                RandomIconGenerator.getResId("DK1")
+        ));
         return database;
     }
 

@@ -8,4 +8,64 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="textPrimary">
+        <item name="fontFamily">@font/product_sans_regular</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/sea_blue</item>
+    </style>
+
+    <style name="textPrimarySmall">
+        <item name="fontFamily">@font/product_sans_regular</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/sea_blue</item>
+    </style>
+
+    <style name="textSecondary">
+        <item name="fontFamily">@font/product_sans_regular</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="textSmallItalic">
+        <item name="fontFamily">@font/robotocondensed_italic</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="textSmall">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="textRegular">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="ratingBarSmall" parent="@style/Widget.AppCompat.RatingBar.Small">
+        <item name="android:stepSize">0.1</item>
+        <item name="android:isIndicator">true</item>
+        <item name="android:max">5</item>
+        <item name="android:numStars">5</item>
+    </style>
+
+    <style name="buttonPrimary">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:background">@drawable/rounded_corner_button</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/light</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

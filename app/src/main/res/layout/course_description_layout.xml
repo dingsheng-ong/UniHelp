@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.course.CourseDescriptionActivity"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/courseCode"
+        style="@style/textPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/course_code" />
+
+    <TextView
+        android:id="@+id/courseName"
+        style="@style/textSecondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/course_name" />
+
+    <TextView
+        android:id="@+id/faculty"
+        style="@style/textRegular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/faculty" />
+
+    <TextView
+        android:layout_marginTop="16dp"
+        style="@style/textPrimarySmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Course Description" />
+
+    <TextView
+        style="@style/textRegular"
+        android:id="@+id/courseDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description" />
+
+    <TextView
+        android:layout_marginTop="16dp"
+        style="@style/textPrimarySmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Learning Outcomes" />
+
+    <TextView
+        style="@style/textRegular"
+        android:id="@+id/courseLearningOutcomes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Learning" />
+
+    <TextView
+        android:layout_marginTop="16dp"
+        style="@style/textPrimarySmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Prerequisite" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/coursePrerequisiteList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

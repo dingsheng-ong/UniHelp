@@ -29,5 +29,32 @@
     <string name="from">From</string>
     <string name="to">To</string>
 
+    <!--CourseDetail-->
+    <string name="course_code">Course Code</string>
+    <string name="course_name">Course Name</string>
+    <string name="faculty">Faculty</string>
+    <string name="course_credit">0</string>
+    <string name="credit_hours">Credit Hours</string>
+    <string name="course_rating">0.0</string>
+    <string name="course_reviews">0 reviews</string>
+    <string name="course_capacity">0</string>
+    <string name="maximum_capacity">Maximum Capacity</string>
+    <string name="course_seats">0</string>
+    <string name="seats_available">Seats Available</string>
+    <string name="course_taken">0</string>
+    <string name="taken_this_course">Taken this course</string>
+    <string name="course_detail_button">Button</string>
+    <string name="course_description">Course Description</string>
+    <string name="course_tab"><![CDATA[>]]></string>
+    <string name="description">Description</string>
+    <string name="instructors">Instructors</string>
+    <string name="groups">Groups</string>
+    <string name="ratings_and_reviews">Ratings and reviews</string>
+    <string name="_5">5</string>
+    <string name="_4">4</string>
+    <string name="_3">3</string>
+    <string name="_2">2</string>
+    <string name="_1">1</string>
+
 </resources>
 

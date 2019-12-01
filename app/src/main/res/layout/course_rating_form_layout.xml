@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.course.CourseRatingFormActivity"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/courseCode"
+        style="@style/textPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/course_code" />
+
+    <TextView
+        android:id="@+id/courseName"
+        style="@style/textSecondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/course_name" />
+
+    <TextView
+        android:id="@+id/faculty"
+        style="@style/textRegular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/faculty" />
+
+    <RatingBar
+        android:layout_marginTop="16dp"
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1"
+        android:max="5"
+        android:layout_gravity="center"/>
+
+    <EditText
+        android:id="@+id/editTextReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        style="@style/buttonPrimary"
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+</LinearLayout>

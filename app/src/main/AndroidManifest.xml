@@ -9,13 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.course.CourseRatingActivity"/>
+        <activity android:name=".ui.course.CourseRatingFormActivity"/>
+        <activity android:name=".ui.course.CourseGroupsActivity"/>
+        <activity android:name=".ui.course.CourseDescriptionActivity"/>
+        <activity android:name=".ui.course.CourseDetailsActivity"/>
+        <activity android:name=".ui.course.CourseInstructorsActivity"/>
         <activity android:name=".ui.reservation.RoomDetailActivity"></activity>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
