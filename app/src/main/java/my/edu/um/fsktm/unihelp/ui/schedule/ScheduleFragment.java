@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui;
+package my.edu.um.fsktm.unihelp.ui.schedule;
 
 
 import android.os.Bundle;

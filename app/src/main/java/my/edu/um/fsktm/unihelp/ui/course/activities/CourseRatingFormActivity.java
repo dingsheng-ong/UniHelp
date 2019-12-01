@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.course;
+package my.edu.um.fsktm.unihelp.ui.course.activities;
 
 import android.os.Bundle;
 import android.widget.TextView;

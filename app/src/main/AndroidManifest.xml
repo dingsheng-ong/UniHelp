@@ -9,15 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.course.CourseRatingActivity"/>
-        <activity android:name=".ui.course.CourseRatingFormActivity"/>
-        <activity android:name=".ui.course.CourseGroupsActivity"/>
-        <activity android:name=".ui.course.CourseDescriptionActivity"/>
-        <activity android:name=".ui.course.CourseDetailsActivity"/>
-        <activity android:name=".ui.course.CourseInstructorsActivity"/>
-        <activity android:name=".ui.reservation.RoomDetailActivity"></activity>
+        <activity android:name=".ui.course.activities.CourseRatingActivity"/>
+        <activity android:name=".ui.course.activities.CourseRatingFormActivity"/>
+        <activity android:name=".ui.course.activities.CourseGroupsActivity"/>
+        <activity android:name=".ui.course.activities.CourseDescriptionActivity"/>
+        <activity android:name=".ui.course.activities.CourseDetailsActivity"/>
+        <activity android:name=".ui.course.activities.CourseInstructorsActivity"/>
+        <activity android:name=".ui.reservation.activities.RoomDetailActivity"></activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"

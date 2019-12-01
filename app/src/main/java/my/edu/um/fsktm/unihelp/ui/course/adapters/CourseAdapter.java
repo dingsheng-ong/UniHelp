@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.course;
+package my.edu.um.fsktm.unihelp.ui.course.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.models.Course;
+import my.edu.um.fsktm.unihelp.ui.course.activities.CourseDetailsActivity;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
     private ArrayList<Course> courseList;

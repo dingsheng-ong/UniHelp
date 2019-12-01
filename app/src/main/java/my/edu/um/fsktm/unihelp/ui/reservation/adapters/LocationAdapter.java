@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.reservation;
+package my.edu.um.fsktm.unihelp.ui.reservation.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Locale;
 
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.models.Location;
+import my.edu.um.fsktm.unihelp.ui.reservation.activities.RoomDetailActivity;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder> {
 
@@ -29,7 +31,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         }
     }
 
-    LocationAdapter(Context context, List<Location> database) {
+    public LocationAdapter(Context context, List<Location> database) {
         this.context = context;
         this.database = database;
     }

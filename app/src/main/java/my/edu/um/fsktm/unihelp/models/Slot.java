@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.course;
+package my.edu.um.fsktm.unihelp.models;
 
 import java.io.Serializable;
 
@@ -6,6 +6,7 @@ public class Slot implements Serializable {
     private String type;
     private int day;
     private int[] timeStart, timeEnd;
+    private Location location;
     final static String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
     public Slot() {
@@ -50,6 +51,10 @@ public class Slot implements Serializable {
         return String.format("%02d", hour) + ":" + String.format("%02d", time[1]) + label;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
@@ -74,5 +79,9 @@ public class Slot implements Serializable {
     public void setTimeEnd(int hour, int min) {
         timeEnd[0] = hour;
         timeEnd[1] = min;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

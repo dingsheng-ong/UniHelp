@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.course;
+package my.edu.um.fsktm.unihelp.ui.course.activities;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.models.Course;
 import my.edu.um.fsktm.unihelp.models.Instructor;
+import my.edu.um.fsktm.unihelp.ui.course.adapters.InstructorAdapter;
 
 public class CourseInstructorsActivity extends AppCompatActivity {
     private Course course;

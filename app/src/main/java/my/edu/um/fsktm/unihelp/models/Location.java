@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.reservation;
+package my.edu.um.fsktm.unihelp.models;
 
 import androidx.annotation.NonNull;
 

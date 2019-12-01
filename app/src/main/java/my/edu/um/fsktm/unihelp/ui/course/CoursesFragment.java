@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import my.edu.um.fsktm.unihelp.R;
-import my.edu.um.fsktm.unihelp.ui.course.Course;
-import my.edu.um.fsktm.unihelp.ui.course.CourseAdapter;
-import my.edu.um.fsktm.unihelp.ui.course.Faculty;
-import my.edu.um.fsktm.unihelp.ui.course.Group;
-import my.edu.um.fsktm.unihelp.ui.course.Instructor;
-import my.edu.um.fsktm.unihelp.ui.course.Review;
-import my.edu.um.fsktm.unihelp.ui.course.Slot;
+import my.edu.um.fsktm.unihelp.models.Course;
+import my.edu.um.fsktm.unihelp.models.Faculty;
+import my.edu.um.fsktm.unihelp.models.Group;
+import my.edu.um.fsktm.unihelp.models.Instructor;
+import my.edu.um.fsktm.unihelp.models.Review;
+import my.edu.um.fsktm.unihelp.models.Slot;
+import my.edu.um.fsktm.unihelp.ui.course.adapters.CourseAdapter;
 
 public class CoursesFragment extends Fragment {
 

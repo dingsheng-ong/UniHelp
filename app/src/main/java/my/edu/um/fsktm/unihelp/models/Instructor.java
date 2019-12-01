@@ -1,6 +1,8 @@
-package my.edu.um.fsktm.unihelp.ui.course;
+package my.edu.um.fsktm.unihelp.models;
 
 import java.io.Serializable;
+
+import my.edu.um.fsktm.unihelp.models.Faculty;
 
 public class Instructor implements Serializable {
     private String name, email, department, image;

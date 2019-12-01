@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.reservation;
+package my.edu.um.fsktm.unihelp.ui.reservation.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.models.Reservation;
 
 public class ReservationAdapter extends ArrayAdapter<Reservation> {
 

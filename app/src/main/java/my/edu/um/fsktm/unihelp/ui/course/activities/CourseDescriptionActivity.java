@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.course;
+package my.edu.um.fsktm.unihelp.ui.course.activities;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.models.Course;
+import my.edu.um.fsktm.unihelp.ui.course.adapters.PrerequisiteAdapter;
 
 public class CourseDescriptionActivity extends AppCompatActivity {
 

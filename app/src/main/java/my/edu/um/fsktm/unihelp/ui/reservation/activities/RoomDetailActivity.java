@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.reservation;
+package my.edu.um.fsktm.unihelp.ui.reservation.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -25,6 +25,9 @@ import java.util.Locale;
 import java.util.Random;
 
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.models.Location;
+import my.edu.um.fsktm.unihelp.models.Reservation;
+import my.edu.um.fsktm.unihelp.ui.reservation.adapters.ReservationAdapter;
 import my.edu.um.fsktm.unihelp.util.DateParser;
 import my.edu.um.fsktm.unihelp.util.Message;
 import my.edu.um.fsktm.unihelp.util.Preferences;

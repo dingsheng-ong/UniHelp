@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.models.Location;
+import my.edu.um.fsktm.unihelp.ui.reservation.adapters.LocationAdapter;
 import my.edu.um.fsktm.unihelp.util.RandomIconGenerator;
 
 public class ReservationFragment extends Fragment {

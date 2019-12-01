@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.course;
+package my.edu.um.fsktm.unihelp.ui.course.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

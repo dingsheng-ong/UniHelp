@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_schedule"
-        android:name="my.edu.um.fsktm.unihelp.ui.ScheduleFragment"
+        android:name="my.edu.um.fsktm.unihelp.ui.schedule.ScheduleFragment"
         android:label="@string/bn_schedule"
         tools:layout="@layout/schedule_fragment" />
 

@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp;
+package my.edu.um.fsktm.unihelp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import java.util.Stack;
 
+import my.edu.um.fsktm.unihelp.MainActivity;
+import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.util.Hash;
 import my.edu.um.fsktm.unihelp.util.Message;
 import my.edu.um.fsktm.unihelp.util.Preferences;

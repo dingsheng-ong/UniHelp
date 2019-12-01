@@ -1,4 +1,4 @@
-package my.edu.um.fsktm.unihelp.ui.course;
+package my.edu.um.fsktm.unihelp.ui.course.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.models.Course;
+import my.edu.um.fsktm.unihelp.ui.course.adapters.GroupAdapter;
+import my.edu.um.fsktm.unihelp.ui.course.adapters.InstructorSimpleAdapter;
 
 public class CourseDetailsActivity extends AppCompatActivity {
     private Course course;
