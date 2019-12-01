@@ -6,6 +6,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.models.Course;
 
 public class CourseRatingFormActivity extends AppCompatActivity {
     private Course course;

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.models.Instructor;
 
 public class InstructorSimpleAdapter extends RecyclerView.Adapter<InstructorSimpleAdapter.ViewHolder> {
     private ArrayList<Instructor> instructorList;

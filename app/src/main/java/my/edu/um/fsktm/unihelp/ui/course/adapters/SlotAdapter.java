@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.models.Slot;
 
 public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
     private ArrayList<Slot> slotList;

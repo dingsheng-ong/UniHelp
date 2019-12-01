@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.models.Course;
+import my.edu.um.fsktm.unihelp.models.Instructor;
 
 public class CourseInstructorsActivity extends AppCompatActivity {
     private Course course;

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.models.Course;
 
 public class PrerequisiteAdapter extends RecyclerView.Adapter<PrerequisiteAdapter.ViewHolder> {
     private ArrayList<Course> preqList;
