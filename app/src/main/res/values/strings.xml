@@ -17,6 +17,10 @@
     <string name="location_reserve_count">0</string>
     <string name="location_rating">0.0</string>
 
+    <!--  Schedule  -->
+    <string name="schedule_item_title">Title</string>
+    <string name="schedule_item_description">Item Description</string>
+
     <!--  RoomDetail  -->
     <string name="btn_book">Book the room</string>
     <string name="date">00-Mmm-yyyy</string>
