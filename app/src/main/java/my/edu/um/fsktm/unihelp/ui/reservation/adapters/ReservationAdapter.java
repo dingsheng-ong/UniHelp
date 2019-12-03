@@ -31,6 +31,9 @@ public class ReservationAdapter extends ArrayAdapter<Reservation> {
                 false
             );
         }
+        if (reservation == null)
+            return convertView;
+
         convertView.setTag(reservation.getStatus());
         TextView tag = convertView.findViewById(R.id.detail_timeline_tag);
         View block = convertView.findViewById(R.id.detail_timeline_block);
@@ -38,6 +41,7 @@ public class ReservationAdapter extends ArrayAdapter<Reservation> {
         tag.setText(reservation.getTime());
         switch (reservation.getStatus()) {
             case NOT_RESERVE:
+                block.setBackgroundColor(context.getResources().getColor(android.R.color.background_light));
                 break;
             case USER_RESERVE:
                 block.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));

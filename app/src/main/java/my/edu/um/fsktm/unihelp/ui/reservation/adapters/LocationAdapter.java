@@ -69,13 +69,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         TextView name = root.findViewById(R.id.location_name);
         TextView faculty = root.findViewById(R.id.location_fac);
         TextView count = root.findViewById(R.id.location_reserve_count);
-        TextView rating = root.findViewById(R.id.location_rating);
 
         icon.setImageResource(item.getIconResID());
         name.setText(item.getName());
         faculty.setText(item.getFaculty());
         count.setText(String.format(Locale.US, "%d reservations", item.getReservations()));
-        rating.setText(String.format(Locale.US, "%.1f ★", item.getRating()));
     }
 
     @Override

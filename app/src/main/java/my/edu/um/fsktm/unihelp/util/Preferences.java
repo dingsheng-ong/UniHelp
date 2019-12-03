@@ -16,7 +16,7 @@ public class Preferences {
         SharedPreferences sharedPref = getSharedPreference(context);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(LOGIN_INFO, data);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getLogin(Context context) {

@@ -18,7 +18,7 @@ public class Hash {
                 sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
             hash = sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            Log.e("Hash.java, Line 15", e.toString());
+            Log.e("H 15", e.toString());
         }
         return hash;
     }

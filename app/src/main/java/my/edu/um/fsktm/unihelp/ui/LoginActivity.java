@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             try {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            } catch (NullPointerException e) { Log.e("Error", e.toString()); }
+            } catch (NullPointerException e) { Log.e("LA 61", e.toString()); }
             Stack<View> stack = new Stack<>();
             stack.push(findViewById(R.id.login_bg));
             while (!stack.isEmpty()) {

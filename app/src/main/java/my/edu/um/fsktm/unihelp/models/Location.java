@@ -9,7 +9,6 @@ public class Location implements Serializable {
     private final String locationId;
     private final String name;
     private final String faculty;
-    private final double rating;
     private final int reservations;
     private final int iconResID;
 
@@ -17,14 +16,12 @@ public class Location implements Serializable {
         String locationId,
         String name,
         String faculty,
-        double rating,
         int reservations,
         int iconResID
     ) {
         this.locationId = locationId;
         this.name = name;
         this.faculty = faculty;
-        this.rating = rating;
         this.reservations = reservations;
         this.iconResID = iconResID;
     }
@@ -39,10 +36,6 @@ public class Location implements Serializable {
 
     public String getFaculty() {
         return faculty;
-    }
-
-    public double getRating() {
-        return rating;
     }
 
     public int getReservations() {

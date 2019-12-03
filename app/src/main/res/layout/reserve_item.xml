@@ -58,14 +58,6 @@
                 android:textSize="12sp"
                 android:text="@string/location_reserve_count" />
 
-            <TextView
-                android:id="@+id/location_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:fontFamily="@font/roboto_regular"
-                android:textSize="14sp"
-                android:text="@string/location_rating" />
-
         </LinearLayout>
 
     </LinearLayout>

@@ -5,7 +5,7 @@ import my.edu.um.fsktm.unihelp.util.Message;
 public class Reservation {
 
     private final String time;
-    private final Message status;
+    private Message status;
 
     public Reservation(String time, Message status) {
         this.time = time;
@@ -19,4 +19,6 @@ public class Reservation {
     public Message getStatus() {
         return status;
     }
+
+    public void setStatus(Message status) { this.status = status; }
 }
