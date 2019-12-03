@@ -150,7 +150,6 @@ public class RoomDetailActivity extends AppCompatActivity {
                     updateCalendar();
                 }
             };
-            Log.d("query", query);
             Database.sendQuery(RoomDetailActivity.this, query, listener);
         }
     };
@@ -285,7 +284,6 @@ public class RoomDetailActivity extends AppCompatActivity {
                                "   AND toTime <= '%s'",
                                email, locationId, from, to
                         );
-                        Log.d("query", query);
                         Response.Listener listener = new Response.Listener() {
                             @Override
                             public void onResponse(Object response) {
@@ -368,7 +366,6 @@ public class RoomDetailActivity extends AppCompatActivity {
             thisRoomId, DateParser.calendarToString(calendar, "yyyy-MM-dd"),
             DateParser.calendarToString(calendar, "yyyy-MM-dd")
         );
-        Log.d("query", query);
         Database.sendQuery(this, query, listener);
     }
 
