@@ -17,7 +17,17 @@ import my.edu.um.fsktm.unihelp.R;
 
 public class Database {
 
-    public static void sendQuery(Context context, String query, Response.Listener listener) {
+    public static void sendQuery(Context context, String query, Response.Listener<JSONObject> listener) {
+        Response.ErrorListener error = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Db 24", error.toString());
+            }
+        };
+        sendQuery(context, query, listener, error);
+    }
+
+    public static void sendQuery(Context context, String query, Response.Listener<JSONObject> listener, Response.ErrorListener error) {
         final String URL = context.getResources().getString(R.string.database_url);
         JSONObject json = new JSONObject();
         try {
@@ -25,13 +35,7 @@ public class Database {
         } catch (JSONException e) { Log.e("JSON Error", e.toString()); }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-            Request.Method.POST, URL, json, listener,
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("Db 29", error.toString());
-                }
-            }
+                Request.Method.POST, URL, json, listener, error
         );
         HttpRequest.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }

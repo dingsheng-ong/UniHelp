@@ -12,10 +12,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Locale;
 import java.util.Stack;
 
 import my.edu.um.fsktm.unihelp.MainActivity;
 import my.edu.um.fsktm.unihelp.R;
+import my.edu.um.fsktm.unihelp.util.Database;
 import my.edu.um.fsktm.unihelp.util.Hash;
 import my.edu.um.fsktm.unihelp.util.Message;
 import my.edu.um.fsktm.unihelp.util.Preferences;
@@ -38,19 +46,39 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            Message loginResult = login(email, password);
-            if (loginResult == Message.LOGIN_SUCCESSFUL) {
-                Preferences.setLogin(LoginActivity.this, email);
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
-            } else {
-                Toast.makeText(
-                    LoginActivity.this,
-                    loginResult.toString(),
-                    Toast.LENGTH_SHORT
-                ).show();
-            }
+            String query = String.format(
+                Locale.US,
+                "SELECT id, email, password\n" +
+                       "  FROM user\n" +
+                       " WHERE email = '%s'\n" +
+                       "   AND password = '%s'",
+                email, password
+            );
+            Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        JSONArray data = response.getJSONArray("data");
+                        if (data.length() == 0) {
+                            Toast.makeText(
+                                LoginActivity.this,
+                                "Incorrect Credential",
+                                Toast.LENGTH_SHORT
+                            ).show();
+                        } else {
+                            JSONObject user = data.getJSONObject(0);
+                            String id = user.getString("0");
+                            Preferences.setLogin(LoginActivity.this, id);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        Log.e("LA 77", e.toString());
+                    }
+                }
+            };
+            Database.sendQuery(LoginActivity.this, query, listener);
         }
     };
 
@@ -86,14 +114,5 @@ public class LoginActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_login).setOnClickListener(login);
         findViewById(R.id.login_bg).setOnClickListener(clearFocus);
-    }
-
-    private Message login(String email, String password) {
-        // TO-DO: fetch credential from database and login
-        if (email.equals("admin@mail.com") && password.equals("098f6bcd4621d373cade4e832627b4f6")) {
-            return Message.LOGIN_SUCCESSFUL;
-        } else {
-            return Message.PASSWORD_INCORRECT;
-        }
     }
 }

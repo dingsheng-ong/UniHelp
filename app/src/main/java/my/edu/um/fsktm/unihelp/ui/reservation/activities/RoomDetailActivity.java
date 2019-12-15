@@ -35,18 +35,21 @@ import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.models.Location;
 import my.edu.um.fsktm.unihelp.models.Reservation;
 import my.edu.um.fsktm.unihelp.ui.reservation.HourPickerDialog;
+import my.edu.um.fsktm.unihelp.ui.reservation.QueryBuilder;
 import my.edu.um.fsktm.unihelp.ui.reservation.adapters.ReservationAdapter;
 import my.edu.um.fsktm.unihelp.util.Database;
 import my.edu.um.fsktm.unihelp.util.DateParser;
+import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 import my.edu.um.fsktm.unihelp.util.Message;
 import my.edu.um.fsktm.unihelp.util.Preferences;
 
 public class RoomDetailActivity extends AppCompatActivity {
 
-    private Calendar calendar, fromTime, toTime;
+    private Calendar calendar, timeStart, timeEnd;
     private ListAdapter adapter;
     private String locationId = null;
     private Reservation[] reservations = new Reservation[14];
+    private AlertDialog dialog;
 
     private View.OnClickListener updateDate(final int delta) {
         return new View.OnClickListener() {
@@ -57,12 +60,12 @@ public class RoomDetailActivity extends AppCompatActivity {
                 if (calendar.getTimeInMillis() < currTime)
                     calendar.setTimeInMillis(currTime);
 
-                fromTime.set(
+                timeStart.set(
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
                 );
-                toTime.set(
+                timeEnd.set(
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
@@ -85,12 +88,12 @@ public class RoomDetailActivity extends AppCompatActivity {
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     long maxTime = Math.max(calendar.getTimeInMillis(), System.currentTimeMillis());
                     calendar.setTimeInMillis(maxTime);
-                    fromTime.set(
+                    timeStart.set(
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
                     );
-                    toTime.set(
+                    timeEnd.set(
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
@@ -112,41 +115,13 @@ public class RoomDetailActivity extends AppCompatActivity {
     private View.OnClickListener bookRoom = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String from = DateParser.calendarToString(fromTime, "yyyy-MM-dd HH");
-            String to = DateParser.calendarToString(toTime, "yyyy-MM-dd HH");
-            from += ":00:00"; to += ":00:00";
-            String date = DateParser.calendarToString(fromTime, "yyyy-MM-dd");
-            String email = Preferences.getLogin(RoomDetailActivity.this);
-            String query = String.format(
-                Locale.US,
-                "INSERT INTO reservation (email, locationId, fromTime, toTime, day)\n" +
-                "       SELECT '%s', '%s', '%s', '%s', %d\n" +
-                "        WHERE NOT EXISTS(\n" +
-                "           SELECT strftime('%%Y-%%m-%%d', fromTime) AS \"date\",\n" +
-                "                  CAST(strftime('%%H', fromTime) AS NUMBER) AS \"fromHour\",\n" +
-                "                  CAST(strftime('%%H', toTime) AS NUMBER) AS \"toHour\"\n" +
-                "             FROM reservation\n" +
-                "            WHERE (\"date\" = '%s' OR \"date\" = '2000-01-01')\n" +
-                "              AND (\n" +
-                "                        %d BETWEEN \"fromHour\" AND \"toHour\"\n" +
-                "                     OR %d BETWEEN \"fromHour\" AND \"toHour\"\n" +
-                "                     OR \"fromHour\" BETWEEN %d AND %d\n" +
-                "                     OR \"toHour\" BETWEEN %d AND %d\n" +
-                "                  )\n" +
-                "              AND %d != \"toHour\"\n" +
-                "              AND %d != \"fromHour\"\n" +
-                "              AND locationId = '%s'\n" +
-                "        )",
-                email, locationId, from, to, fromTime.get(Calendar.DAY_OF_WEEK) - 1, date,
-                fromTime.get(Calendar.HOUR_OF_DAY), toTime.get(Calendar.HOUR_OF_DAY),
-                fromTime.get(Calendar.HOUR_OF_DAY), toTime.get(Calendar.HOUR_OF_DAY),
-                fromTime.get(Calendar.HOUR_OF_DAY), toTime.get(Calendar.HOUR_OF_DAY),
-                fromTime.get(Calendar.HOUR_OF_DAY), toTime.get(Calendar.HOUR_OF_DAY),
-                locationId
-            );
+            String user = Preferences.getLogin(RoomDetailActivity.this);
+            String query = QueryBuilder.bookRoom(user, locationId, timeStart, timeEnd);
+            Log.d("query", query);
             Response.Listener listener = new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
+                    Log.d("resp", response.toString());
                     updateCalendar();
                 }
             };
@@ -155,7 +130,7 @@ public class RoomDetailActivity extends AppCompatActivity {
     };
 
     private View.OnClickListener selectTime(final boolean isFrom) {
-        final Calendar c = (isFrom) ? fromTime : toTime;
+        final Calendar c = (isFrom) ? timeStart : timeEnd;
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,6 +150,7 @@ public class RoomDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reserve_detail_layout);
+        dialog = LoadingScreen.build(RoomDetailActivity.this);
 
         setupActionBar();
         setupAllTextView();
@@ -219,17 +195,17 @@ public class RoomDetailActivity extends AppCompatActivity {
         facTV.setText(location.getFaculty());
 
         calendar = Calendar.getInstance();
-        fromTime = Calendar.getInstance();
-        toTime   = Calendar.getInstance();
+        timeStart = Calendar.getInstance();
+        timeEnd   = Calendar.getInstance();
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         if (hour > 20 || hour < 8)
-            for (Calendar c: new Calendar[]{calendar, fromTime, toTime}) {
+            for (Calendar c: new Calendar[]{calendar, timeStart, timeEnd}) {
                 if (hour > 20) c.add(Calendar.DAY_OF_MONTH, 1);
                 c.set(Calendar.HOUR_OF_DAY, 7);
             }
-        fromTime.add(Calendar.HOUR_OF_DAY, 1);
-        toTime.add(Calendar.HOUR_OF_DAY, 2);
+        timeStart.add(Calendar.HOUR_OF_DAY, 1);
+        timeEnd.add(Calendar.HOUR_OF_DAY, 2);
 
         for (int i = 8; i < 22; i++) {
             reservations[i - 8] = new Reservation(
@@ -267,23 +243,16 @@ public class RoomDetailActivity extends AppCompatActivity {
 
                 Calendar f = Calendar.getInstance();
                 Calendar t = Calendar.getInstance();
-                f.setTime(fromTime.getTime()); f.set(Calendar.HOUR_OF_DAY, min);
-                t.setTime(toTime.getTime()); t.set(Calendar.HOUR_OF_DAY, max);
+                f.setTime(timeStart.getTime()); f.set(Calendar.HOUR_OF_DAY, min);
+                t.setTime(timeEnd.getTime()); t.set(Calendar.HOUR_OF_DAY, max);
                 final String from = DateParser.calendarToString(f, "yyyy-MM-dd HH") + ":00:00";
                 final String to = DateParser.calendarToString(t, "yyyy-MM-dd HH") + ":00:00";
 
                 DialogInterface.OnClickListener cancelBooking = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String email = Preferences.getLogin(RoomDetailActivity.this);
-                        String query = String.format(Locale.US,
-                        "DELETE FROM reservation\n" +
-                               " WHERE email = '%s'\n" +
-                               "   AND locationId = '%s'\n" +
-                               "   AND fromTime >= '%s'\n" +
-                               "   AND toTime <= '%s'",
-                               email, locationId, from, to
-                        );
+                        String user = Preferences.getLogin(RoomDetailActivity.this);
+                        String query = QueryBuilder.cancelRoom(user, locationId, from, to);
                         Response.Listener listener = new Response.Listener() {
                             @Override
                             public void onResponse(Object response) {
@@ -302,10 +271,8 @@ public class RoomDetailActivity extends AppCompatActivity {
     }
 
     private void queryReservation() {
-        // TO-DO: query reservation list
-        final String thisRoomId = this.locationId;
-        final String userEmail  = Preferences.getLogin(RoomDetailActivity.this);
-
+        final String userID  = Preferences.getLogin(RoomDetailActivity.this);
+        dialog.show();
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -316,7 +283,7 @@ public class RoomDetailActivity extends AppCompatActivity {
                     JSONArray data = response.getJSONArray("data");
                     for (int i = 0; i < data.length(); i++) {
                         JSONObject entry = data.getJSONObject(i);
-                        String email = entry.getString("1");
+                        String id = entry.getString("1");
                         String fromStr = entry.getString("2");
                         String toStr = entry.getString("3");
                         if (fromStr.length() < 9)
@@ -339,8 +306,8 @@ public class RoomDetailActivity extends AppCompatActivity {
                         int hourTo = to.get(Calendar.HOUR_OF_DAY);
 
                         Message status;
-                        if (userEmail.equals(email)) status = Message.USER_RESERVE;
-                        else                         status = Message.NON_USER_RESERVE;
+                        if (userID.equals(id)) status = Message.USER_RESERVE;
+                        else                   status = Message.NON_USER_RESERVE;
 
                         for (int h = hourFrom; h < hourTo; h++)
                             reservations[h - 8].setStatus(status);
@@ -350,21 +317,12 @@ public class RoomDetailActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RDA 247", e.toString());
                 }
+                dialog.dismiss();
             }
         };
-        String query = String.format(
-            Locale.US,
-            "SELECT locationId,\n" +
-                   "       email,\n" +
-                   "       fromTime,\n" +
-                   "       toTime,\n" +
-                   "       strftime('%%Y-%%m-%%d', fromTime) AS \"date\"\n" +
-                   "  FROM reservation\n" +
-                   " WHERE locationId = '%s'\n" +
-                   "   AND (\"date\" = '%s' OR \"date\" = '2000-01-01')\n" +
-                   "   AND day = strftime('%%w', '%S')",
-            thisRoomId, DateParser.calendarToString(calendar, "yyyy-MM-dd"),
-            DateParser.calendarToString(calendar, "yyyy-MM-dd")
+        String query = QueryBuilder.roomSchedule(
+            DateParser.calendarToString(calendar, "yyyy-MM-dd"),
+            locationId
         );
         Database.sendQuery(this, query, listener);
     }
@@ -396,8 +354,8 @@ public class RoomDetailActivity extends AppCompatActivity {
             findViewById(R.id.from_time),
             findViewById(R.id.to_time)
         };
-        int fromHour = fromTime.get(Calendar.HOUR_OF_DAY);
-        int toHour   = toTime.get(Calendar.HOUR_OF_DAY);
+        int fromHour = timeStart.get(Calendar.HOUR_OF_DAY);
+        int toHour   = timeEnd.get(Calendar.HOUR_OF_DAY);
         int nowHour  = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="15dp"
+    android:layout_marginTop="5dp"
     android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp" >
+    android:layout_marginRight="10dp"
+    android:padding="15dp"
+    android:background="@android:color/white" >
 
     <ImageView
         android:id="@+id/location_icon"
@@ -18,7 +19,7 @@
         android:layout_marginRight="5dp"
         android:layout_gravity="center"
         android:scaleType="centerCrop" />
-    
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="0dp"
@@ -29,38 +30,26 @@
             android:id="@+id/location_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:fontFamily="@font/roboto_light"
-            android:textColor="@color/dark"
-            android:textSize="16sp"
+            style="@style/textRegular"
             android:text="@string/location_name" />
 
         <TextView
             android:id="@+id/location_fac"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:fontFamily="@font/robotocondensed_lightitalic"
+            style="@style/textSmallItalic"
             android:textColor="@color/sea_blue"
-            android:textSize="14sp"
             android:text="@string/location_fac" />
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <TextView
+            android:id="@+id/location_reserve_count"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/location_reserve_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="12dp"
-                android:layout_marginEnd="12dp"
-                app:fontFamily="@font/robotocondensed_regular"
-                android:textSize="12sp"
-                android:text="@string/location_reserve_count" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            style="@style/textSmall"
+            android:text="@string/location_reserve_count" />
 
     </LinearLayout>
-
 
 </LinearLayout>

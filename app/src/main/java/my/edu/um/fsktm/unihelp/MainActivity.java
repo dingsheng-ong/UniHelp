@@ -19,21 +19,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // debugging - reset login status
-        // Preferences.setLogin(MainActivity.this, null);
+//         Preferences.setLogin(MainActivity.this, null);
 
         // go to LoginActivity if not logged in
         if (Preferences.getLogin(MainActivity.this) == null) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.setFlags(intent.getFlags() |  Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
+        } else {
+            setContentView(R.layout.main_layout);
+
+            BottomNavigationView navView = findViewById(R.id.nav_view);
+            NavController navController = Navigation.findNavController(
+                    this, R.id.nav_host_fragment
+            );
+            NavigationUI.setupWithNavController(navView, navController);
         }
-
-        setContentView(R.layout.main_layout);
-
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        NavController navController = Navigation.findNavController(
-        this, R.id.nav_host_fragment
-        );
-        NavigationUI.setupWithNavController(navView, navController);
     }
 }
