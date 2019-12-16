@@ -16,7 +16,7 @@
     <string name="location_name">Name</string>
     <string name="location_fac">Faculty</string>
     <string name="location_reserve_count">0</string>
-    <string name="location_rating">0.0</string>
+    <string name="drawer_logout">Logout</string>
 
     <!--  Schedule  -->
     <string name="schedule_item_title">Title</string>

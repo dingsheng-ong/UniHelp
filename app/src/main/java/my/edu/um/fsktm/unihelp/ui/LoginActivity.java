@@ -2,6 +2,7 @@ package my.edu.um.fsktm.unihelp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,14 +27,17 @@ import my.edu.um.fsktm.unihelp.MainActivity;
 import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.util.Database;
 import my.edu.um.fsktm.unihelp.util.Hash;
-import my.edu.um.fsktm.unihelp.util.Message;
+import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 import my.edu.um.fsktm.unihelp.util.Preferences;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private AlertDialog loading;
+
     private View.OnClickListener login = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            loading.show();
             EditText
                 etEmail = findViewById(R.id.et_email),
                 etPassword = findViewById(R.id.et_password);
@@ -48,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
             String query = String.format(
                 Locale.US,
-                "SELECT id, email, password\n" +
+                "SELECT id, email, password, name\n" +
                        "  FROM user\n" +
                        " WHERE email = '%s'\n" +
                        "   AND password = '%s'",
@@ -68,7 +73,10 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             JSONObject user = data.getJSONObject(0);
                             String id = user.getString("0");
-                            Preferences.setLogin(LoginActivity.this, id);
+                            String email = user.getString("1");
+                            String name = user.getString("3");
+                            String credential = id + "/" + email + "/" + name;
+                            Preferences.setLogin(LoginActivity.this, credential);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(intent);
@@ -76,9 +84,17 @@ public class LoginActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         Log.e("LA 77", e.toString());
                     }
+                    loading.dismiss();
                 }
             };
-            Database.sendQuery(LoginActivity.this, query, listener);
+            Response.ErrorListener error = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(LoginActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
+                    loading.dismiss();
+                }
+            };
+            Database.sendQuery(LoginActivity.this, query, listener, error);
         }
     };
 
@@ -111,6 +127,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+
+        loading = LoadingScreen.build(LoginActivity.this);
 
         findViewById(R.id.btn_login).setOnClickListener(login);
         findViewById(R.id.login_bg).setOnClickListener(clearFocus);

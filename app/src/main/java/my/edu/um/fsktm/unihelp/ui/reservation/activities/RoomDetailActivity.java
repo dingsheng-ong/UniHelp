@@ -49,7 +49,7 @@ public class RoomDetailActivity extends AppCompatActivity {
     private ListAdapter adapter;
     private String locationId = null;
     private Reservation[] reservations = new Reservation[14];
-    private AlertDialog dialog;
+    private AlertDialog loading;
 
     private View.OnClickListener updateDate(final int delta) {
         return new View.OnClickListener() {
@@ -115,7 +115,8 @@ public class RoomDetailActivity extends AppCompatActivity {
     private View.OnClickListener bookRoom = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String user = Preferences.getLogin(RoomDetailActivity.this);
+            String[] credential = Preferences.getLogin(RoomDetailActivity.this).split("/");
+            String user = credential[0];
             String query = QueryBuilder.bookRoom(user, locationId, timeStart, timeEnd);
             Log.d("query", query);
             Response.Listener listener = new Response.Listener() {
@@ -136,7 +137,7 @@ public class RoomDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface loading, int which) {
                         updateFromAndToTime();
                     }
                 };
@@ -150,7 +151,7 @@ public class RoomDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reserve_detail_layout);
-        dialog = LoadingScreen.build(RoomDetailActivity.this);
+        loading = LoadingScreen.build(RoomDetailActivity.this);
 
         setupActionBar();
         setupAllTextView();
@@ -250,8 +251,9 @@ public class RoomDetailActivity extends AppCompatActivity {
 
                 DialogInterface.OnClickListener cancelBooking = new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String user = Preferences.getLogin(RoomDetailActivity.this);
+                    public void onClick(DialogInterface loading, int which) {
+                        String[] credential = Preferences.getLogin(RoomDetailActivity.this).split("/");
+                        String user = credential[0];
                         String query = QueryBuilder.cancelRoom(user, locationId, from, to);
                         Response.Listener listener = new Response.Listener() {
                             @Override
@@ -271,8 +273,9 @@ public class RoomDetailActivity extends AppCompatActivity {
     }
 
     private void queryReservation() {
-        final String userID  = Preferences.getLogin(RoomDetailActivity.this);
-        dialog.show();
+        String[] credential = Preferences.getLogin(RoomDetailActivity.this).split("/");
+        final String userID = credential[0];
+        loading.show();
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -317,7 +320,7 @@ public class RoomDetailActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RDA 247", e.toString());
                 }
-                dialog.dismiss();
+                loading.dismiss();
             }
         };
         String query = QueryBuilder.roomSchedule(
