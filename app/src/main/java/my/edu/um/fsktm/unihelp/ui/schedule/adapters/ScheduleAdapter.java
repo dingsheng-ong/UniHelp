@@ -98,6 +98,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ItemVi
                 description.setText(descriptionText);
                 break;
             case "divider":
+                itemLayout.setBackgroundColor(Color.TRANSPARENT);
+                itemLayout.setPadding(0,0,0,0);
                 title.setTextColor(Color.GRAY);
                 title.setTextSize(25);
                 title.setText(item.getTitle());
