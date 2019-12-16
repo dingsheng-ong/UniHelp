@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                             String credential = id + "/" + email + "/" + name;
                             Preferences.setLogin(LoginActivity.this, credential);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
                     } catch (JSONException e) {
