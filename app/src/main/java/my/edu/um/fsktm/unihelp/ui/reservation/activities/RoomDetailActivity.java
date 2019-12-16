@@ -21,8 +21,10 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -323,11 +325,19 @@ public class RoomDetailActivity extends AppCompatActivity {
                 loading.dismiss();
             }
         };
+        Response.ErrorListener error = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(RoomDetailActivity.this, "Please try again!", Toast.LENGTH_SHORT).show();
+                loading.dismiss();
+            }
+        };
+
         String query = QueryBuilder.roomSchedule(
             DateParser.calendarToString(calendar, "yyyy-MM-dd"),
             locationId
         );
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void updateCalendar() {
