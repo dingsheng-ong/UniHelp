@@ -43,7 +43,7 @@ public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.Vi
         holder.instructorName.setText(instructor.getName());
         holder.instructorEmail.setText(instructor.getEmail());
         holder.instructorDepartment.setText(instructor.getDepartment());
-        holder.instructorFaculty.setText(instructor.getFaculty().toString());
+        holder.instructorFaculty.setText(instructor.getFaculty());
     }
 
     @Override

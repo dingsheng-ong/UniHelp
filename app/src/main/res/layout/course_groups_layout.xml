@@ -29,13 +29,95 @@
         android:layout_height="wrap_content"
         android:text="@string/faculty" />
 
-    <Spinner
-        android:id="@+id/spinnerCourseGroups"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinnerCourseGroups"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <Button
+            style="@style/buttonPrimary"
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/courseGroupSlots"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="42dp"
+        android:id="@+id/slotSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="41dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            style="@style/textPrimarySmall"
+            android:background="@drawable/timetable_border"
+            android:padding="8dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MON" />
+
+        <TextView
+            style="@style/textPrimarySmall"
+            android:background="@drawable/timetable_border"
+            android:padding="8dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TUE" />
+
+        <TextView
+            style="@style/textPrimarySmall"
+            android:background="@drawable/timetable_border"
+            android:padding="8dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="WED" />
+
+        <TextView
+            style="@style/textPrimarySmall"
+            android:background="@drawable/timetable_border"
+            android:padding="8dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="THU" />
+
+        <TextView
+            style="@style/textPrimarySmall"
+            android:background="@drawable/timetable_border"
+            android:padding="8dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FRI" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/timetable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

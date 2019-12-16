@@ -21,7 +21,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     private ArrayList<Course> courseList;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView courseCode, courseName, rating, faculty, leadInstructor, credits, capacity;
+        public TextView courseCode, courseName, rating, faculty, leadInstructor, credits, capacity, reviewStat;
         public RatingBar ratingBar;
         public CardView courseCardView;
         public Context context;
@@ -36,6 +36,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             leadInstructor = view.findViewById(R.id.leadInstructor);
             credits = view.findViewById(R.id.credits);
             capacity = view.findViewById(R.id.capacity);
+            reviewStat = view.findViewById(R.id.reviewStat);
             courseCardView = view.findViewById(R.id.courseCardView);
             context = view.getContext();
         }
@@ -60,22 +61,24 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         holder.courseName.setText(course.getCourseName());
 
         String rating = "-";
-        if (course.getReviews().size() > 0) {
-            rating = String.format("%.1f", course.getAverageRating());
+        if (course.getReviews() > 0) {
+            rating = String.format("%.1f", course.getRating());
         }
         holder.rating.setText(rating);
-        holder.ratingBar.setRating(course.getAverageRating());
-        holder.faculty.setText(course.getFaculty().toString());
-        holder.leadInstructor.setText(course.getInstructors().get(0).getName());
-        holder.credits.setText(Integer.toString(course.getCredits()));
-        holder.capacity.setText(Integer.toString(course.getCapacity()));
+        holder.ratingBar.setRating((float) course.getRating());
+        holder.reviewStat.setText(String.format("%d reviews", course.getReviews()));
+        holder.faculty.setText(course.getFaculty());
+        holder.leadInstructor.setText(course.getLeadInstructor());
+        holder.capacity.setText(String.format("Capacity: %d", course.getCapacity()));
+        holder.credits.setText(String.format("Credit: %d", course.getCredits()));
+
 
 
         holder.courseCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CourseDetailsActivity.class);
-                intent.putExtra("course", course);
+                intent.putExtra("courseCode", course.getCourseCode());
                 context.startActivity(intent);
             }
         });

@@ -3,20 +3,30 @@ package my.edu.um.fsktm.unihelp.models;
 import java.io.Serializable;
 
 public class Slot implements Serializable {
-    private String type;
-    private int day;
-    private int[] timeStart, timeEnd;
-    private Location location;
+    private String type, location, courseCode;
+    private int day, timeStart, timeEnd;
     final static String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-    public Slot() {
-        timeStart = new int[2];
-        timeEnd = new int[2];
+    public Slot(String type, int timeStart, int timeEnd, int day) {
+        this.type = type;
+        this.timeStart = timeStart;
+        this.timeEnd = timeEnd;
+        this.day = day;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public String getCourseCode() {
+        return courseCode;
     }
 
     public String getType() {
         return type;
     }
+
+    public String getTypePretty() { return type.substring(0,1).toUpperCase() + type.substring(1); }
 
     public int getDay() {
         return day;
@@ -24,7 +34,7 @@ public class Slot implements Serializable {
 
     public String getDayString() { return days[day]; }
 
-    public int[] getTimeStart() {
+    public int getTimeStart() {
         return timeStart;
     }
 
@@ -32,7 +42,7 @@ public class Slot implements Serializable {
         return get12HString(timeStart);
     }
 
-    public int[] getTimeEnd() {
+    public int getTimeEnd() {
         return timeEnd;
     }
 
@@ -40,18 +50,17 @@ public class Slot implements Serializable {
         return get12HString(timeEnd);
     }
 
-    public String get12HString(int[] time) {
+    public String get12HString(int time) {
         String label = "AM";
-        int hour = time[0];
-        if (hour >= 12) {
+        if (time >= 12) {
             label = "PM";
-            if (hour > 12) hour -= 12;
+            if (time > 12) time -= 12;
         }
-        if (hour == 0) hour = 12;
-        return String.format("%02d", hour) + ":" + String.format("%02d", time[1]) + label;
+        if (time == 0) time = 12;
+        return String.format("%02d:00%s", time, label);
     }
 
-    public Location getLocation() {
+    public String getLocation() {
         return location;
     }
 
@@ -63,25 +72,15 @@ public class Slot implements Serializable {
         this.day = day;
     }
 
-    public void setTimeStart(int[] timeStart) {
+    public void setTimeStart(int timeStart) {
         this.timeStart = timeStart;
     }
 
-    public void setTimeStart(int hour, int min) {
-        timeStart[0] = hour;
-        timeStart[1] = min;
-    }
-
-    public void setTimeEnd(int[] timeEnd) {
+    public void setTimeEnd(int timeEnd) {
         this.timeEnd = timeEnd;
     }
 
-    public void setTimeEnd(int hour, int min) {
-        timeEnd[0] = hour;
-        timeEnd[1] = min;
-    }
-
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 }

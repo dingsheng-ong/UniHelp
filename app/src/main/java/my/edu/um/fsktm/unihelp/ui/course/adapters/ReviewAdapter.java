@@ -15,7 +15,9 @@ import my.edu.um.fsktm.unihelp.models.Review;
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
     private ArrayList<Review> reviewList;
 
-    public ReviewAdapter(ArrayList<Review> reviewList) { this.reviewList = reviewList; }
+    public ReviewAdapter(ArrayList<Review> reviewList) {
+        this.reviewList = reviewList;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView rating, comment;
@@ -30,7 +32,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     @Override
     public ReviewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View reviewView = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_review_item, parent, false);
-        return new ReviewAdapter.ViewHolder(reviewView );
+        return new ReviewAdapter.ViewHolder(reviewView);
     }
 
     @Override

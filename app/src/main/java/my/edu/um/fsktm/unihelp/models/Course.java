@@ -6,53 +6,24 @@ import java.util.ArrayList;
 public class Course implements Serializable {
     private String courseCode, courseName, description, learningOutcome;
     private int capacity, seats, taken, credits;
-    private Faculty faculty;
-    private ArrayList<Instructor> instructors;
-    private ArrayList<Group> groups;
-    private ArrayList<Review> reviews;
-    private ArrayList<Course> prerequisite;
+    private String faculty;
+    private String leadInstructor;
+    private double rating;
+    private int reviews;
 
-    public void setCourseCode(String courseCode) {
+    public Course(String courseCode, String courseName) {
         this.courseCode = courseCode;
-    }
-
-    public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public void setSeats(int seats) {
-        this.seats = seats;
-    }
-
-    public void setTaken(int taken) {
-        this.taken = taken;
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
-    }
-
-    public void setFaculty(Faculty faculty) {
+    public Course(String courseCode, String courseName, String faculty, String leadInstructor, int capacity, int credits, int reviews, double rating) {
+        this.courseCode = courseCode;
+        this.courseName = courseName;
         this.faculty = faculty;
-    }
-
-    public void setInstructors(ArrayList<Instructor> instructors) {
-        this.instructors = instructors;
-    }
-
-    public void setGroups(ArrayList<Group> groups) {
-        this.groups = groups;
-    }
-
-    public void setReviews(ArrayList<Review> reviews) {
+        this.leadInstructor = leadInstructor;
+        this.capacity = capacity;
+        this.credits = credits;
+        this.rating = rating;
         this.reviews = reviews;
     }
 
@@ -60,78 +31,96 @@ public class Course implements Serializable {
         this.learningOutcome = learningOutcome;
     }
 
-    public void setPrerequisite(ArrayList<Course> prerequisite) {
-        this.prerequisite = prerequisite;
+    public void setCredits(int credits) {
+        this.credits = credits;
     }
 
-    public String getCourseCode() {
-        return courseCode;
+    public void setTaken(int taken) {
+        this.taken = taken;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public void setSeats(int seats) {
+        this.seats = seats;
     }
 
-    public String getDescription() {
-        return description;
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setReviews(int reviews) {
+        this.reviews = reviews;
+    }
+
+    public void setLeadInstructor(String leadInstructor) {
+        this.leadInstructor = leadInstructor;
     }
 
     public String getLearningOutcome() {
         return learningOutcome;
     }
 
-    public int getCapacity() {
-        return capacity;
+    public int getTaken() {
+        return taken;
     }
 
     public int getSeats() {
         return seats;
     }
 
-    public int getTaken() {
-        return taken;
-    }
-
     public int getCredits() {
         return credits;
     }
 
-    public Faculty getFaculty() {
-        return faculty;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public ArrayList<Instructor> getInstructors() {
-        return instructors;
+    public String getDescription() {
+        return description;
     }
 
-    public ArrayList<Group> getGroups() {
-        return groups;
+    public String getCourseName() {
+        return courseName;
     }
 
-    public ArrayList<Review> getReviews() {
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public int getReviews() {
         return reviews;
     }
 
-    public ArrayList<Course> getPrerequisite() {
-        return prerequisite;
+    public String getFaculty() {
+        return faculty;
     }
 
-    public float getAverageRating() {
-        float avg = 0;
-        for (int i = 0; i < reviews.size(); i++) {
-            avg += reviews.get(i).getRating();
-        }
-        avg /= (float) reviews.size();
-        return avg;
+    public String getLeadInstructor() {
+        return leadInstructor;
     }
 
-    public int[] getRatingPercentage() {
-        float[] percentages = new float[5];
-        for (int i = 0; i < 5; i++) percentages[i] = 0;
-        for (int i = 0; i < reviews.size(); i++) percentages[reviews.get(i).getRating() - 1]++;
-        for (int i = 0; i < 5; i++) percentages[i] /= reviews.size();
-        int[] _p = new int[5];
-        for (int i = 0; i < 5; i++) _p[i] = (int) (percentages[i] * 100);
-        return _p;
-    }
 }

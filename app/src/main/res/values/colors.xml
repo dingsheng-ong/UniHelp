@@ -11,6 +11,7 @@
     <color name="dark">#212121</color>
 
     <color name="red">#d50000</color>
+    <color name="conflict">#ff5555</color>
     <color name="sea_blue">#0d47a1</color>
 
     <color name="gold">#ffd700</color>

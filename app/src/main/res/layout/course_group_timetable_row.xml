@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        style="@style/textSmall"
+        android:id="@+id/time"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:gravity="top|end"
+        android:textSize="12sp"
+        android:textColor="@color/dark_gray"
+        android:text="@string/time"/>
+
+    <TextView
+        style="@style/textSmall"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/light"
+        android:background="@drawable/timetable_border"
+        android:id="@+id/timetable_mon"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="empty"/>
+
+    <TextView
+        style="@style/textSmall"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/light"
+        android:background="@drawable/timetable_border_accent"
+        android:id="@+id/timetable_tue"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="some course"/>
+
+    <TextView
+        style="@style/textSmall"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/light"
+        android:background="@drawable/timetable_border_conflict"
+        android:id="@+id/timetable_wed"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="! Conflict"/>
+
+    <TextView
+        style="@style/textSmall"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/light"
+        android:background="@drawable/timetable_border_secondary"
+        android:id="@+id/timetable_thu"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="secondary"/>
+
+    <TextView
+        style="@style/textSmall"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/light"
+        android:background="@drawable/timetable_border"
+        android:id="@+id/timetable_fri"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"  />
+
+</LinearLayout>
