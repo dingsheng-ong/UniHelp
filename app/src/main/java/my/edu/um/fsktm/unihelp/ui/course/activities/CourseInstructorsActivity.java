@@ -1,9 +1,11 @@
 package my.edu.um.fsktm.unihelp.ui.course.activities;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,12 +27,24 @@ import my.edu.um.fsktm.unihelp.models.Instructor;
 import my.edu.um.fsktm.unihelp.ui.course.adapters.InstructorAdapter;
 import my.edu.um.fsktm.unihelp.ui.course.adapters.PrerequisiteAdapter;
 import my.edu.um.fsktm.unihelp.util.Database;
+import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 
 public class CourseInstructorsActivity extends AppCompatActivity {
     private String mCourseCode;
     private TextView courseCode, courseName, faculty;
     private RecyclerView.Adapter leadAdapter, coAdapter;
     private ArrayList<Instructor> leadInstructorList, coInstructorList;
+    private AlertDialog loading;
+    private int queryCounter = 0;
+    private Response.ErrorListener error = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Toast.makeText(CourseInstructorsActivity.this, "Please try again!", Toast.LENGTH_SHORT).show();
+            queryCounter--;
+            if (queryCounter == 0)
+                loading.dismiss();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +53,7 @@ public class CourseInstructorsActivity extends AppCompatActivity {
 
         leadInstructorList = new ArrayList<>();
         coInstructorList = new ArrayList<>();
+        loading = LoadingScreen.build(CourseInstructorsActivity.this);
 
         mCourseCode = getIntent().getStringExtra("courseCode");
         renderActionBar();
@@ -85,6 +101,8 @@ public class CourseInstructorsActivity extends AppCompatActivity {
     }
 
     private void queryCourseDescription() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -98,6 +116,9 @@ public class CourseInstructorsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -110,10 +131,12 @@ public class CourseInstructorsActivity extends AppCompatActivity {
                 "   ON A.faculty = B.id " +
                 "WHERE A.id = '" + mCourseCode + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void queryInstructorList() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -144,6 +167,9 @@ public class CourseInstructorsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -159,6 +185,6 @@ public class CourseInstructorsActivity extends AppCompatActivity {
                 "   ON B.faculty = C.id " +
                 "WHERE A.course = '" + mCourseCode + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 }

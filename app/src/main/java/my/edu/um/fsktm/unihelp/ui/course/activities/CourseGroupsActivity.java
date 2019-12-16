@@ -1,5 +1,6 @@
 package my.edu.um.fsktm.unihelp.ui.course.activities;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +34,7 @@ import my.edu.um.fsktm.unihelp.models.TimetableCell;
 import my.edu.um.fsktm.unihelp.ui.course.adapters.SlotAdapter;
 import my.edu.um.fsktm.unihelp.ui.course.adapters.TimetableRowAdapter;
 import my.edu.um.fsktm.unihelp.util.Database;
+import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 import my.edu.um.fsktm.unihelp.util.Preferences;
 
 public class CourseGroupsActivity extends AppCompatActivity {
@@ -44,6 +48,17 @@ public class CourseGroupsActivity extends AppCompatActivity {
     private TimetableCell[][] timetable;
     private String mCourseCode;
     private Group selectedGroup;
+    private AlertDialog loading;
+    private int queryCounter = 0;
+    private Response.ErrorListener error = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Toast.makeText(CourseGroupsActivity.this, "Please try again!", Toast.LENGTH_SHORT).show();
+            queryCounter--;
+            if (queryCounter == 0)
+                loading.dismiss();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +69,8 @@ public class CourseGroupsActivity extends AppCompatActivity {
         groupList = new ArrayList<>();
         slotList = new ArrayList<>();
         timetable = new TimetableCell[5][14];
+        loading = LoadingScreen.build(CourseGroupsActivity.this);
+
         for (int i = 0; i < timetable.length; i++) {
             for (int j = 0; j < timetable[i].length; j++) {
                 timetable[i][j] = new TimetableCell(j + 8);
@@ -163,6 +180,8 @@ public class CourseGroupsActivity extends AppCompatActivity {
     }
 
     private void queryCourseDescription() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -176,6 +195,9 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -188,10 +210,12 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 "   ON A.faculty = B.id " +
                 "WHERE A.id = '" + mCourseCode + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void queryGroupList() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -226,6 +250,9 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -240,10 +267,12 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 "   ON A.slot = B.id " +
                 "WHERE A.course = '" + mCourseCode + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void queryUserCourseRegistered() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -257,6 +286,9 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -266,10 +298,12 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 "   ON A.user = B.id " +
                 "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this) + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void registerUserToCourse() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -279,6 +313,9 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -288,7 +325,7 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 "   (SELECT id FROM user WHERE email = '" + Preferences.getLogin(this) + "'), " +
                 "   '2019/2020')";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
 }

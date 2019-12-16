@@ -1,6 +1,7 @@
 package my.edu.um.fsktm.unihelp.ui.course;
 
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,8 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +34,7 @@ import my.edu.um.fsktm.unihelp.models.Review;
 import my.edu.um.fsktm.unihelp.models.Slot;
 import my.edu.um.fsktm.unihelp.ui.course.adapters.CourseAdapter;
 import my.edu.um.fsktm.unihelp.util.Database;
+import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 import my.edu.um.fsktm.unihelp.util.RandomIconGenerator;
 
 public class CoursesFragment extends Fragment {
@@ -39,10 +43,13 @@ public class CoursesFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     private ArrayList<Course> courseList;
+    private AlertDialog loading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.courses_fragment, container, false);
+        // setup loading screen
+        loading = LoadingScreen.build(getActivity());
         courseList = new ArrayList<>();
         recyclerView = view.findViewById(R.id.courseList);
         renderRecyclerView();
@@ -59,6 +66,7 @@ public class CoursesFragment extends Fragment {
     }
 
     private void queryListOfCourses() {
+        loading.show();
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -82,9 +90,17 @@ public class CoursesFragment extends Fragment {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                loading.dismiss();
             }
         };
-
+        Response.ErrorListener error = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "Please try again!", Toast.LENGTH_SHORT).show();
+                loading.dismiss();
+            }
+        };
+        
         String query = "WITH lead_instructor AS (" +
                 "   SELECT A.course, B.name " +
                 "   FROM course_instructor A " +
@@ -115,7 +131,7 @@ public class CoursesFragment extends Fragment {
                 "   ON A.id = D.course " +
                 "ORDER BY A.id ASC";
 
-        Database.sendQuery(getActivity(), query, listener);
+        Database.sendQuery(getActivity(), query, listener, error);
     }
 
 }

@@ -1,5 +1,6 @@
 package my.edu.um.fsktm.unihelp.ui.course.activities;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -8,11 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +23,7 @@ import org.json.JSONObject;
 
 import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.util.Database;
+import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 import my.edu.um.fsktm.unihelp.util.Preferences;
 
 public class CourseRatingFormActivity extends AppCompatActivity {
@@ -27,6 +31,17 @@ public class CourseRatingFormActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private EditText review;
     private String mCourseCode;
+    private AlertDialog loading;
+    private int queryCounter = 0;
+    private Response.ErrorListener error = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Toast.makeText(CourseRatingFormActivity.this, "Please try again!", Toast.LENGTH_SHORT).show();
+            queryCounter--;
+            if (queryCounter == 0)
+                loading.dismiss();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +51,7 @@ public class CourseRatingFormActivity extends AppCompatActivity {
         renderActionBar();
 
         mCourseCode = getIntent().getStringExtra("courseCode");
+        loading = LoadingScreen.build(CourseRatingFormActivity.this);
 
         initViews();
         queryCourseDescription();
@@ -78,6 +94,8 @@ public class CourseRatingFormActivity extends AppCompatActivity {
     }
 
     private void queryCourseDescription() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -91,6 +109,9 @@ public class CourseRatingFormActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -103,10 +124,12 @@ public class CourseRatingFormActivity extends AppCompatActivity {
                 "   ON A.faculty = B.id " +
                 "WHERE A.id = '" + mCourseCode + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void queryUserReview() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -120,6 +143,9 @@ public class CourseRatingFormActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -131,15 +157,21 @@ public class CourseRatingFormActivity extends AppCompatActivity {
                 "   ON A.user = B.id " +
                 "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this) + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void createReview() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
                 finish();
             }
+
         };
         int ratingVal = (int) ratingBar.getRating();
         String commentVal = review.getText().toString();
@@ -149,6 +181,6 @@ public class CourseRatingFormActivity extends AppCompatActivity {
                 ratingVal,
                 commentVal);
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 }

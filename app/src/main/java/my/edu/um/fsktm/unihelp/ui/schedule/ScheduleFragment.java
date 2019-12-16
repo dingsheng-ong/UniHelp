@@ -1,6 +1,7 @@
 package my.edu.um.fsktm.unihelp.ui.schedule;
 
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,8 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +35,7 @@ import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.models.ScheduleItem;
 import my.edu.um.fsktm.unihelp.ui.schedule.adapters.ScheduleAdapter;
 import my.edu.um.fsktm.unihelp.util.Database;
+import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 import my.edu.um.fsktm.unihelp.util.RandomIconGenerator;
 
 public class ScheduleFragment extends Fragment {
@@ -41,13 +45,15 @@ public class ScheduleFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     List<ScheduleItem> database;
     private int queryCount;
+    private AlertDialog loading;
+    private int queryCounter = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.schedule_fragment, container, false);
-
+        loading = LoadingScreen.build(getActivity());
         recyclerView = view.findViewById(R.id.schedule_item_list);
 
         layoutManager = new LinearLayoutManager(getActivity());
@@ -63,6 +69,8 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void queryListOfItems() {
+        loading.show();
+        queryCounter += 3;
 
         Response.Listener<JSONObject> eventListener = new Response.Listener<JSONObject>() {
             @Override
@@ -89,6 +97,9 @@ public class ScheduleFragment extends Fragment {
                 } finally {
                     queryDone();
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -118,6 +129,9 @@ public class ScheduleFragment extends Fragment {
                 } finally {
                     queryDone();
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -156,6 +170,18 @@ public class ScheduleFragment extends Fragment {
                 } finally {
                     queryDone();
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
+            }
+        };
+        Response.ErrorListener error = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "Please try again!", Toast.LENGTH_SHORT).show();
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
         String eventQuery = "SELECT name,description,time_start,time_end,location FROM event WHERE time_start >= date('now')";
@@ -170,9 +196,9 @@ public class ScheduleFragment extends Fragment {
                 "  WHERE D.time_start >= date('now')";
         database.clear();
         queryCount = 0;
-        Database.sendQuery(getActivity(), eventQuery, eventListener);
-        Database.sendQuery(getActivity(), bookingQuery, bookingListener);
-        Database.sendQuery(getActivity(), classQuery, classListener);
+        Database.sendQuery(getActivity(), eventQuery, eventListener, error);
+        Database.sendQuery(getActivity(), bookingQuery, bookingListener, error);
+        Database.sendQuery(getActivity(), classQuery, classListener, error);
 
     }
 

@@ -1,9 +1,11 @@
 package my.edu.um.fsktm.unihelp.ui.course.activities;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +25,7 @@ import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.models.Course;
 import my.edu.um.fsktm.unihelp.ui.course.adapters.PrerequisiteAdapter;
 import my.edu.um.fsktm.unihelp.util.Database;
+import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 
 public class CourseDescriptionActivity extends AppCompatActivity {
 
@@ -29,12 +33,23 @@ public class CourseDescriptionActivity extends AppCompatActivity {
     private TextView courseCode, courseName, faculty, description, learningOutcome;
     private RecyclerView.Adapter adapter;
     private ArrayList<Course> preqList;
+    private AlertDialog loading;
+    private int queryCounter = 0;
+    private Response.ErrorListener error = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Toast.makeText(CourseDescriptionActivity.this, "Please try again!", Toast.LENGTH_SHORT).show();
+            queryCounter--;
+            if (queryCounter == 0)
+                loading.dismiss();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_description_layout);
-
+        loading = LoadingScreen.build(CourseDescriptionActivity.this);
         preqList = new ArrayList<>();
         mCourseCode = getIntent().getStringExtra("courseCode");
 
@@ -79,6 +94,8 @@ public class CourseDescriptionActivity extends AppCompatActivity {
     }
 
     private void queryCourseDescription() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -94,6 +111,9 @@ public class CourseDescriptionActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -108,10 +128,12 @@ public class CourseDescriptionActivity extends AppCompatActivity {
                 "   ON A.faculty = B.id " +
                 "WHERE A.id = '" + mCourseCode + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void queryPreqList() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -129,6 +151,9 @@ public class CourseDescriptionActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -140,6 +165,6 @@ public class CourseDescriptionActivity extends AppCompatActivity {
                 "   ON A.preq = B.id " +
                 "WHERE A.course = '" + mCourseCode + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 }

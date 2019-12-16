@@ -1,5 +1,6 @@
 package my.edu.um.fsktm.unihelp.ui.course.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +33,7 @@ import my.edu.um.fsktm.unihelp.models.Review;
 import my.edu.um.fsktm.unihelp.ui.course.adapters.InstructorAdapter;
 import my.edu.um.fsktm.unihelp.ui.course.adapters.ReviewAdapter;
 import my.edu.um.fsktm.unihelp.util.Database;
+import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 import my.edu.um.fsktm.unihelp.util.Preferences;
 
 public class CourseRatingActivity extends AppCompatActivity {
@@ -40,6 +44,17 @@ public class CourseRatingActivity extends AppCompatActivity {
     private Button button;
     private String mCourseCode;
     private ArrayList<Review> reviewList;
+    private AlertDialog loading;
+    private int queryCounter = 0;
+    private Response.ErrorListener error = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Toast.makeText(CourseRatingActivity.this, "Please try again!", Toast.LENGTH_SHORT).show();
+            queryCounter--;
+            if (queryCounter == 0)
+                loading.dismiss();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +65,7 @@ public class CourseRatingActivity extends AppCompatActivity {
 
         mCourseCode = getIntent().getStringExtra("courseCode");
         reviewList = new ArrayList<>();
+        loading = LoadingScreen.build(CourseRatingActivity.this);
 
         initViews();
         queryCourseDetails();
@@ -121,6 +137,8 @@ public class CourseRatingActivity extends AppCompatActivity {
     }
 
     private void queryCourseDetails() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -159,6 +177,9 @@ public class CourseRatingActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -192,10 +213,12 @@ public class CourseRatingActivity extends AppCompatActivity {
                 "   ON A.id = C.course " +
                 "WHERE A.id = '" + mCourseCode + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void queryReviewList() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -215,15 +238,20 @@ public class CourseRatingActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
         String query = "SELECT rating, comment FROM review WHERE course = '" + mCourseCode + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 
     private void queryUserCourseRegistered() {
+        loading.show();
+        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -237,6 +265,9 @@ public class CourseRatingActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
             }
         };
 
@@ -246,6 +277,6 @@ public class CourseRatingActivity extends AppCompatActivity {
                 "   ON A.user = B.id " +
                 "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this) + "'";
 
-        Database.sendQuery(this, query, listener);
+        Database.sendQuery(this, query, listener, error);
     }
 }
