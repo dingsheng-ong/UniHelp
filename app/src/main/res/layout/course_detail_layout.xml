@@ -41,7 +41,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="35dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -94,7 +94,7 @@
                 android:background="@color/gray" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -120,7 +120,7 @@
                 android:background="@color/gray" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 

@@ -68,7 +68,8 @@
         <TextView
             style="@style/textPrimarySmall"
             android:background="@drawable/timetable_border"
-            android:padding="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:gravity="center"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -78,7 +79,8 @@
         <TextView
             style="@style/textPrimarySmall"
             android:background="@drawable/timetable_border"
-            android:padding="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:gravity="center"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -88,7 +90,8 @@
         <TextView
             style="@style/textPrimarySmall"
             android:background="@drawable/timetable_border"
-            android:padding="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:gravity="center"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -98,7 +101,8 @@
         <TextView
             style="@style/textPrimarySmall"
             android:background="@drawable/timetable_border"
-            android:padding="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:gravity="center"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -108,7 +112,8 @@
         <TextView
             style="@style/textPrimarySmall"
             android:background="@drawable/timetable_border"
-            android:padding="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:gravity="center"
             android:layout_weight="1"
             android:layout_width="match_parent"

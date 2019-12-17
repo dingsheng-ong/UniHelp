@@ -303,7 +303,6 @@ public class CourseGroupsActivity extends AppCompatActivity {
 
     private void registerUserToCourse() {
         loading.show();
-        queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject resp) {
@@ -313,17 +312,17 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
-                queryCounter--;
-                if (queryCounter == 0)
-                    loading.dismiss();
+                loading.dismiss();
+                finish();
             }
         };
 
-        String query = "INSERT INTO registration (course, user, semester) " +
+        String query = "INSERT INTO registration (course, user, semester, group_id) " +
                 "VALUES (" +
                 "   '"+ mCourseCode+"', " +
                 "   (SELECT id FROM user WHERE email = '" + Preferences.getLogin(this).split("/")[1] + "'), " +
-                "   '2019/2020')";
+                "   '2019/2020', " +
+                "   '" + selectedGroup.getId() + "')";
 
         Database.sendQuery(this, query, listener, error);
     }
