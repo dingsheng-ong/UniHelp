@@ -256,7 +256,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 "   course, " +
                 "   SUM(CASE WHEN semester = '2019/2020' THEN 0 ELSE 1 END) AS taken, " +
                 "   SUM(CASE WHEN semester = '2019/2020' THEN 1 ELSE 0 END) AS registered " +
-                "   FROM registration" +
+                "   FROM registration " +
                 "   WHERE course = '" + mCourseCode + "')" +
                 "SELECT " +
                 "   A.id, " +   // 0
@@ -265,21 +265,21 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 "   A.description, " +  // 3
                 "   A.credit, " +       // 4
                 "   A.capacity, " +     // 5
-                "   C.rating, " +       // 6
-                "   C.count, " +        // 7
-                "   C.r1, " +           // 8
-                "   C.r2, " +           // 9
-                "   C.r3, " +           // 10
-                "   C.r4, " +           // 11
-                "   C.r5, " +           // 12
-                "   D.taken, " +        // 13
-                "   D.registered " +    // 14
+                "   IFNULL(C.rating, 0.0), " +       // 6
+                "   IFNULL(C.count, 0), " +        // 7
+                "   IFNULL(C.r1, 0), " +           // 8
+                "   IFNULL(C.r2, 0), " +           // 9
+                "   IFNULL(C.r3, 0), " +           // 10
+                "   IFNULL(C.r4, 0), " +           // 11
+                "   IFNULL(C.r5, 0), " +           // 12
+                "   IFNULL(D.taken, 0), " +        // 13
+                "   IFNULL(D.registered, 0) " +    // 14
                 "FROM course A " +
                 "JOIN faculty B " +
                 "   ON A.faculty = B.id " +
-                "JOIN rating C " +
+                "LEFT JOIN rating C " +
                 "   ON A.id = C.course " +
-                "JOIN registration_count D " +
+                "LEFT JOIN registration_count D " +
                 "   ON A.id = D.course " +
                 "WHERE A.id = '" + mCourseCode + "'";
 

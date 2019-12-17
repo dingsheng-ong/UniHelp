@@ -7,23 +7,23 @@ import my.edu.um.fsktm.unihelp.util.DateParser;
 
 public class QueryBuilder {
 
-    public final static String reservationCount = "WITH reservation_count AS (    \n" +
-                                                  "    SELECT A.id AS id,         \n" +
-                                                  "           COUNT(A.id) AS count\n" +
-                                                  "      FROM location A          \n" +
-                                                  "      JOIN reservation B       \n" +
-                                                  "        ON A.id = B.location   \n" +
-                                                  "     GROUP BY A.id             \n" +
-                                                  ") SELECT A.id,                 \n" +
-                                                  "         A.name,               \n" +
-                                                  "         C.name,               \n" +
-                                                  "         count                 \n" +
-                                                  "    FROM location A            \n" +
-                                                  "    JOIN reservation_count B   \n" +
-                                                  "      ON A.id = B.id           \n" +
-                                                  "    JOIN faculty C             \n" +
-                                                  "      ON A.faculty = C.id      \n" +
-                                                  "   ORDER BY count DESC           ";
+    public final static String reservationCount = "WITH reservation_count AS (          \n" +
+                                                  "    SELECT A.id AS id,               \n" +
+                                                  "           COUNT(A.id) AS count      \n" +
+                                                  "      FROM location A                \n" +
+                                                  "      JOIN reservation B             \n" +
+                                                  "        ON A.id = B.location         \n" +
+                                                  "     GROUP BY A.id                   \n" +
+                                                  ") SELECT A.id,                       \n" +
+                                                  "         A.name,                     \n" +
+                                                  "         C.name,                     \n" +
+                                                  "         IFNULL(count, 0)            \n" +
+                                                  "    FROM location A                  \n" +
+                                                  "    LEFT JOIN reservation_count B    \n" +
+                                                  "      ON A.id = B.id                 \n" +
+                                                  "    JOIN faculty C                   \n" +
+                                                  "      ON A.faculty = C.id            \n" +
+                                                  "   ORDER BY count DESC               ";
 
     public final static String roomSchedule(String date, String location) {
         String query = "SELECT location,\n" +

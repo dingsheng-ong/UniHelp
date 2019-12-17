@@ -199,17 +199,17 @@ public class CourseRatingActivity extends AppCompatActivity {
                 "   A.id, " +           // 0
                 "   A.name, " +         // 1
                 "   B.name, " +         // 2
-                "   C.rating, " +       // 3
-                "   C.count, " +        // 4
-                "   C.r1, " +           // 5
-                "   C.r2, " +           // 6
-                "   C.r3, " +           // 7
-                "   C.r4, " +           // 8
-                "   C.r5 " +            // 9
+                "   IFNULL(C.rating, 0), " +       // 3
+                "   IFNULL(C.count, 0), " +        // 4
+                "   IFNULL(C.r1, 0), " +           // 5
+                "   IFNULL(C.r2, 0), " +           // 6
+                "   IFNULL(C.r3, 0), " +           // 7
+                "   IFNULL(C.r4, 0), " +           // 8
+                "   IFNULL(C.r5, 0) " +            // 9
                 "FROM course A " +
                 "JOIN faculty B " +
                 "   ON A.faculty = B.id " +
-                "JOIN rating C " +
+                "LEFT JOIN rating C " +
                 "   ON A.id = C.course " +
                 "WHERE A.id = '" + mCourseCode + "'";
 

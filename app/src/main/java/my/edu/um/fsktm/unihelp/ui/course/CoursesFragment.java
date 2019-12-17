@@ -143,14 +143,14 @@ public class CoursesFragment extends Fragment {
                 "   C.name, " +     // 3
                 "   A.capacity, " + // 4
                 "   A.credit, " +   // 5
-                "   D.count, " +    // 6
-                "   D.rating " +    // 7
+                "   IFNULL(D.count, 0), " +    // 6
+                "   IFNULL(D.rating, 0) " +    // 7
                 "FROM course A " +
                 "JOIN faculty B " +
                 "   ON A.faculty = B.id " +
                 "JOIN lead_instructor C " +
                 "   ON A.id = C.course " +
-                "JOIN rating D " +
+                "LEFT JOIN rating D " +
                 "   ON A.id = D.course " +
                 "ORDER BY A.id ASC";
 
