@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -17,8 +19,9 @@ import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.models.Course;
 import my.edu.um.fsktm.unihelp.ui.course.activities.CourseDetailsActivity;
 
-public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
+public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> implements Filterable {
     private ArrayList<Course> courseList;
+    private ArrayList<Course> filtered;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView courseCode, courseName, rating, faculty, leadInstructor, credits, capacity, reviewStat;
@@ -44,6 +47,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     public CourseAdapter(ArrayList<Course> courseList) {
         this.courseList = courseList;
+        this.filtered = courseList;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Course course = courseList.get(position);
+        final Course course = filtered.get(position);
         final Context context = holder.context;
 
         holder.courseCode.setText(course.getCourseCode());
@@ -86,6 +90,40 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return courseList.size();
+        return filtered.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String query = constraint.toString();
+                if (query.isEmpty()) {
+                    filtered = courseList;
+                } else {
+                    ArrayList<Course> _filtered = new ArrayList<>();
+                    for (Course course: courseList) {
+                        boolean matchFaculty = course.getFaculty().toLowerCase().contains(query.toLowerCase());
+                        boolean matchName = course.getCourseName().toLowerCase().contains(query.toLowerCase());
+                        boolean matchCode = course.getCourseCode().toLowerCase().contains(query.toLowerCase());
+                        boolean matchInstructor = course.getLeadInstructor().toLowerCase().contains(query.toLowerCase());
+                        if (matchFaculty || matchName || matchCode || matchInstructor) {
+                            _filtered.add(course);
+                        }
+                    }
+                    filtered = _filtered;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filtered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filtered = (ArrayList<Course>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

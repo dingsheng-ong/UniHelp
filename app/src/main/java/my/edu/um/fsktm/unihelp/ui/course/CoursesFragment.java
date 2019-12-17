@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -42,14 +43,16 @@ public class CoursesFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter adapter;
+    private CourseAdapter adapter;
     private ArrayList<Course> courseList;
     private AlertDialog loading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.courses_fragment, container, false);
-        ((Toolbar) getActivity().findViewById(R.id.main_toolbar)).getMenu().clear();
+//        ((Toolbar) getActivity().findViewById(R.id.main_toolbar)).getMenu().clear();
+        Toolbar actionBar = getActivity().findViewById(R.id.main_toolbar);
+        setupSearchActionBar(actionBar);
         // setup loading screen
         loading = LoadingScreen.build(getActivity());
         courseList = new ArrayList<>();
@@ -59,8 +62,26 @@ public class CoursesFragment extends Fragment {
         return view;
     }
 
+    private void setupSearchActionBar(Toolbar actionBar) {
+        actionBar.getMenu().clear();
+        actionBar.inflateMenu(R.menu.reserve_search);
+        SearchView searchView = (SearchView) actionBar.getMenu().findItem(R.id.search_reservation).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
+
     private void renderRecyclerView() {
-        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         adapter = new CourseAdapter(courseList);
