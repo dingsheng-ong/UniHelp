@@ -296,7 +296,7 @@ public class CourseGroupsActivity extends AppCompatActivity {
                 "FROM registration A " +
                 "JOIN user B " +
                 "   ON A.user = B.id " +
-                "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this) + "'";
+                "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this).split("/")[1] + "'";
 
         Database.sendQuery(this, query, listener, error);
     }
@@ -322,7 +322,7 @@ public class CourseGroupsActivity extends AppCompatActivity {
         String query = "INSERT INTO registration (course, user, semester) " +
                 "VALUES (" +
                 "   '"+ mCourseCode+"', " +
-                "   (SELECT id FROM user WHERE email = '" + Preferences.getLogin(this) + "'), " +
+                "   (SELECT id FROM user WHERE email = '" + Preferences.getLogin(this).split("/")[1] + "'), " +
                 "   '2019/2020')";
 
         Database.sendQuery(this, query, listener, error);

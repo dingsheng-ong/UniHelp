@@ -194,8 +194,15 @@ public class CourseDetailsActivity extends AppCompatActivity {
                     faculty.setText(courseObject.getString("2"));
                     description.setText(courseObject.getString("3"));
 
+                    int capacityVal = courseObject.getInt("5");
+                    int registered = courseObject.getInt("14");
+
                     credit.setText(String.format("%d", courseObject.getInt("4")));
-                    capacity.setText(String.format("%d", courseObject.getInt("5")));
+                    capacity.setText(String.format("%d", capacityVal));
+
+                    taken.setText(String.format("%d", courseObject.getInt("13")));
+                    seats.setText(String.format("%d", capacityVal - registered));
+
 
                     int reviews = courseObject.getInt("7");
                     String rating = "-";
@@ -223,10 +230,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
                         pb4.setProgress(0);
                         pb5.setProgress(0);
                     }
-
-
-                    seats.setText("0");
-                    taken.setText("0");
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
@@ -247,7 +250,14 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 "       SUM(CASE WHEN rating = 4 THEN 1 ELSE 0 END) AS r4, " +
                 "       SUM(CASE WHEN rating = 5 THEN 1 ELSE 0 END) AS r5" +
                 "   FROM review " +
-                "   GROUP BY course) " +
+                "   GROUP BY course), " +
+                "registration_count as ( " +
+                "   SELECT " +
+                "   course, " +
+                "   SUM(CASE WHEN semester = '2019/2020' THEN 0 ELSE 1 END) AS taken, " +
+                "   SUM(CASE WHEN semester = '2019/2020' THEN 1 ELSE 0 END) AS registered " +
+                "   FROM registration" +
+                "   WHERE course = '" + mCourseCode + "')" +
                 "SELECT " +
                 "   A.id, " +   // 0
                 "   A.name, " +   // 1
@@ -261,12 +271,16 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 "   C.r2, " +           // 9
                 "   C.r3, " +           // 10
                 "   C.r4, " +           // 11
-                "   C.r5 " +            // 12
+                "   C.r5, " +           // 12
+                "   D.taken, " +        // 13
+                "   D.registered " +    // 14
                 "FROM course A " +
                 "JOIN faculty B " +
                 "   ON A.faculty = B.id " +
                 "JOIN rating C " +
                 "   ON A.id = C.course " +
+                "JOIN registration_count D " +
+                "   ON A.id = D.course " +
                 "WHERE A.id = '" + mCourseCode + "'";
 
         Database.sendQuery(this, query, listener, error);
@@ -388,7 +402,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 "FROM registration A " +
                 "JOIN user B " +
                 "   ON A.user = B.id " +
-                "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this) + "'";
+                "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this).split("/")[1] + "'";
 
         Database.sendQuery(this, query, listener, error);
     }

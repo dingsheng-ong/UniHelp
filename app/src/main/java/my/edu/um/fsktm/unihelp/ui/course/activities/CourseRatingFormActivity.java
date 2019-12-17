@@ -155,7 +155,7 @@ public class CourseRatingFormActivity extends AppCompatActivity {
                 "FROM review A " +
                 "JOIN user B " +
                 "   ON A.user = B.id " +
-                "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this) + "'";
+                "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this).split("/")[1] + "'";
 
         Database.sendQuery(this, query, listener, error);
     }
@@ -177,7 +177,7 @@ public class CourseRatingFormActivity extends AppCompatActivity {
         String commentVal = review.getText().toString();
         String query = String.format("INSERT OR REPLACE INTO review (course, user, rating, comment) VALUES ('%s', (SELECT id FROM user WHERE email = '%s'), %d, '%s')",
                 mCourseCode,
-                Preferences.getLogin(this),
+                Preferences.getLogin(this).split("/")[1],
                 ratingVal,
                 commentVal);
 

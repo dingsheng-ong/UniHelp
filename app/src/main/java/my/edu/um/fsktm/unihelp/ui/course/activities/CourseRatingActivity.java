@@ -162,11 +162,11 @@ public class CourseRatingActivity extends AppCompatActivity {
                     reviewStat.setText(reviews + " reviews");
 
                     if (reviews > 0) {
-                        pb1.setProgress((int) (courseObject.getDouble("8") / reviews * 100));
-                        pb2.setProgress((int) (courseObject.getDouble("9") / reviews * 100));
-                        pb3.setProgress((int) (courseObject.getDouble("10") / reviews * 100));
-                        pb4.setProgress((int) (courseObject.getDouble("11") / reviews * 100));
-                        pb5.setProgress((int) (courseObject.getDouble("12") / reviews * 100));
+                        pb1.setProgress((int) (courseObject.getDouble("5") / reviews * 100));
+                        pb2.setProgress((int) (courseObject.getDouble("6") / reviews * 100));
+                        pb3.setProgress((int) (courseObject.getDouble("7") / reviews * 100));
+                        pb4.setProgress((int) (courseObject.getDouble("8") / reviews * 100));
+                        pb5.setProgress((int) (courseObject.getDouble("9") / reviews * 100));
                     } else {
                         pb1.setProgress(0);
                         pb2.setProgress(0);
@@ -196,8 +196,8 @@ public class CourseRatingActivity extends AppCompatActivity {
                 "   FROM review " +
                 "   GROUP BY course) " +
                 "SELECT " +
-                "   A.id, " +   // 0
-                "   A.name, " +   // 1
+                "   A.id, " +           // 0
+                "   A.name, " +         // 1
                 "   B.name, " +         // 2
                 "   C.rating, " +       // 3
                 "   C.count, " +        // 4
@@ -275,7 +275,7 @@ public class CourseRatingActivity extends AppCompatActivity {
                 "FROM registration A " +
                 "JOIN user B " +
                 "   ON A.user = B.id " +
-                "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this) + "'";
+                "WHERE A.course = '" + mCourseCode + "' AND B.email = '" + Preferences.getLogin(this).split("/")[1] + "'";
 
         Database.sendQuery(this, query, listener, error);
     }
