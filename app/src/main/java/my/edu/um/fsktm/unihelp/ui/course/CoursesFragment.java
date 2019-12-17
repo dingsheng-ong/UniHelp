@@ -4,6 +4,7 @@ package my.edu.um.fsktm.unihelp.ui.course;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +49,7 @@ public class CoursesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.courses_fragment, container, false);
+        ((Toolbar) getActivity().findViewById(R.id.main_toolbar)).getMenu().clear();
         // setup loading screen
         loading = LoadingScreen.build(getActivity());
         courseList = new ArrayList<>();

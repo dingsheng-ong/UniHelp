@@ -4,6 +4,7 @@ package my.edu.um.fsktm.unihelp.ui.schedule;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,6 +54,7 @@ public class ScheduleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.schedule_fragment, container, false);
+        ((Toolbar) getActivity().findViewById(R.id.main_toolbar)).getMenu().clear();
         loading = LoadingScreen.build(getActivity());
         recyclerView = view.findViewById(R.id.schedule_item_list);
 
