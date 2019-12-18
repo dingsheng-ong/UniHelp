@@ -84,6 +84,12 @@ public class ReservationFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        queryListOfLocation();
+    }
+
     private void queryListOfLocation() {
         loading.show();
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
