@@ -32,7 +32,7 @@ import my.edu.um.fsktm.unihelp.util.LoadingScreen;
 public class CourseInstructorsActivity extends AppCompatActivity {
     private String mCourseCode;
     private TextView courseCode, courseName, faculty;
-    private RecyclerView.Adapter leadAdapter, coAdapter;
+    private InstructorAdapter leadAdapter, coAdapter;
     private ArrayList<Instructor> leadInstructorList, coInstructorList;
     private AlertDialog loading;
     private int queryCounter = 0;
@@ -59,7 +59,8 @@ public class CourseInstructorsActivity extends AppCompatActivity {
         renderActionBar();
         initViews();
         queryCourseDescription();
-        queryInstructorList();
+        queryInstructorList(true);
+        queryInstructorList(false);
     }
 
     private void initViews() {
@@ -134,7 +135,20 @@ public class CourseInstructorsActivity extends AppCompatActivity {
         Database.sendQuery(this, query, listener, error);
     }
 
-    private void queryInstructorList() {
+
+    private void queryInstructorList(boolean lead) {
+        final ArrayList<Instructor> instructors;
+        final InstructorAdapter adapter;
+        int leadVal;
+        if (lead) {
+            instructors = leadInstructorList;
+            adapter = leadAdapter;
+            leadVal = 1;
+        } else {
+            instructors = coInstructorList;
+            adapter = coAdapter;
+            leadVal = 0;
+        }
         loading.show();
         queryCounter++;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
@@ -142,28 +156,17 @@ public class CourseInstructorsActivity extends AppCompatActivity {
             public void onResponse(JSONObject resp) {
                 try {
                     JSONArray data = resp.getJSONArray("data");
-                    JSONObject leadEntry = data.getJSONObject(0);
-                    leadInstructorList.clear();
-                    leadInstructorList.add(new Instructor(
-                            leadEntry.getString("0"),
-                            leadEntry.getString("1"),
-                            leadEntry.getString("2"),
-                            leadEntry.getString("3")
-                    ));
-
-                    coInstructorList.clear();
-                    for (int i = 1; i < resp.getInt("rowCount"); i++) {
+                    instructors.clear();
+                    for (int i = 0; i < resp.getInt("rowCount"); i++) {
                         JSONObject entry = data.getJSONObject(i);
-                        coInstructorList.add(new Instructor(
+                        instructors.add(new Instructor(
                                 entry.getString("0"),
                                 entry.getString("1"),
                                 entry.getString("2"),
                                 entry.getString("3")
                         ));
                     }
-
-                    leadAdapter.notifyDataSetChanged();
-                    coAdapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     Log.e("RF 73", e.toString());
                 }
@@ -183,8 +186,10 @@ public class CourseInstructorsActivity extends AppCompatActivity {
                 "   ON A.instructor = B.id " +
                 "JOIN faculty C " +
                 "   ON B.faculty = C.id " +
-                "WHERE A.course = '" + mCourseCode + "'";
+                "WHERE A.course = '" + mCourseCode + "' AND A.lead = " + leadVal;
 
         Database.sendQuery(this, query, listener, error);
     }
+
+
 }

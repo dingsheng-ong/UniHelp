@@ -62,6 +62,12 @@ public class CoursesFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        queryListOfCourses();
+    }
+
     private void setupSearchActionBar(Toolbar actionBar) {
         actionBar.getMenu().clear();
         actionBar.inflateMenu(R.menu.reserve_search);
@@ -131,7 +137,7 @@ public class CoursesFragment extends Fragment {
                 "       ON A.instructor = B.id " +
                 "   JOIN faculty C " +
                 "       ON B.faculty = C.id " +
-                "   GROUP BY A.course), " +
+                "   WHERE A.lead = 1), " +
                 "rating AS (" +
                 "   SELECT course, AVG(rating) AS rating, COUNT(rating) AS count " +
                 "   FROM review " +

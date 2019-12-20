@@ -302,10 +302,10 @@ public class CourseDetailsActivity extends AppCompatActivity {
                             groupMap.put(groupId, new ArrayList<Slot>());
                         }
                         Slot slot = new Slot(
-                            entry.getString("1"),
-                            entry.getInt("2"),
-                            entry.getInt("3"),
-                            entry.getInt("4")
+                                entry.getString("1"),
+                                entry.getInt("2"),
+                                entry.getInt("3"),
+                                entry.getInt("4")
                         );
                         groupMap.get(groupId).add(slot);
                     }
@@ -349,6 +349,37 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 try {
                     JSONArray data = resp.getJSONArray("data");
                     instructorList.clear();
+                    JSONObject entry = data.getJSONObject(0);
+                    instructorList.add(new Instructor(
+                            entry.getString("0")
+                    ));
+                    queryCoInstructorList();
+                } catch (JSONException e) {
+                    Log.e("RF 73", e.toString());
+                }
+                queryCounter--;
+                if (queryCounter == 0)
+                    loading.dismiss();
+            }
+        };
+
+        String query = "SELECT B.name " +
+                "FROM course_instructor A " +
+                "JOIN instructor B " +
+                "   ON A.instructor = B.id " +
+                "WHERE A.course = '" + mCourseCode + "' AND lead = 1";
+
+        Database.sendQuery(this, query, listener, error);
+    }
+
+    private void queryCoInstructorList() {
+        loading.show();
+        queryCounter++;
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject resp) {
+                try {
+                    JSONArray data = resp.getJSONArray("data");
                     for (int i = 0; i < resp.getInt("rowCount"); i++) {
                         JSONObject entry = data.getJSONObject(i);
                         instructorList.add(new Instructor(
@@ -369,7 +400,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 "FROM course_instructor A " +
                 "JOIN instructor B " +
                 "   ON A.instructor = B.id " +
-                "WHERE A.course = '" + mCourseCode + "'";
+                "WHERE A.course = '" + mCourseCode + "' AND lead = 0";
 
         Database.sendQuery(this, query, listener, error);
     }
