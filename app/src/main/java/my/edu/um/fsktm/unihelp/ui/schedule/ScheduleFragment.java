@@ -31,12 +31,14 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import my.edu.um.fsktm.unihelp.R;
 import my.edu.um.fsktm.unihelp.models.ScheduleItem;
 import my.edu.um.fsktm.unihelp.ui.schedule.adapters.ScheduleAdapter;
 import my.edu.um.fsktm.unihelp.util.Database;
 import my.edu.um.fsktm.unihelp.util.LoadingScreen;
+import my.edu.um.fsktm.unihelp.util.Preferences;
 import my.edu.um.fsktm.unihelp.util.RandomIconGenerator;
 
 public class ScheduleFragment extends Fragment {
@@ -194,9 +196,14 @@ public class ScheduleFragment extends Fragment {
                     loading.dismiss();
             }
         };
+        String user = Preferences.getLogin(getActivity()).split("/")[0];
         String eventQuery = "SELECT name,description,time_start,time_end,location FROM event WHERE time_start >= date('now')";
-        String bookingQuery = "SELECT time_start, time_end, location FROM reservation WHERE user = 'U01' AND time_start >= date('now')";
-        String classQuery = "WITH user_courses AS (SELECT course, group_id FROM registration WHERE user = 'U01')\n" +
+        String bookingQuery = String.format(
+            Locale.US,
+            "SELECT time_start, time_end, location FROM reservation WHERE user = '%s' AND time_start >= date('now')",
+            user
+        );
+        String classQuery = "WITH user_courses AS (SELECT course, group_id FROM registration WHERE user = '%s')\n" +
                 "SELECT A.id, A.name, D.type, D.day, D.time_start, D.time_end, D.location, F.name FROM course A \n" +
                 "  INNER JOIN user_courses B ON B.course = A.id\n" +
                 "  INNER JOIN course_group C ON A.id = C.course AND B.group_id = C.group_id\n" +
@@ -205,6 +212,7 @@ public class ScheduleFragment extends Fragment {
                 "  INNER JOIN instructor F ON D.instructor = F.id\n"
 //                "  WHERE D.time_start >= date('now')"
                 ;
+        classQuery = String.format(Locale.US, classQuery, user);
         database.clear();
         queryCount = 0;
         Database.sendQuery(getActivity(), eventQuery, eventListener, error);
