@@ -144,14 +144,22 @@ public class ScheduleFragment extends Fragment {
                     JSONArray data = resp.getJSONArray("data");
 //                    database.clear();
                     for (int i = 0; i < resp.getInt("rowCount"); i++) {
+//                        A.id, A.name, D.type, D.day, D.time_start, D.time_end, D.location, F.name
                         JSONObject entry = data.getJSONObject(i);
                         Calendar startDate = Calendar.getInstance();
                         Calendar endDate = Calendar.getInstance();
-                        startDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(entry.getString("3")));
+
+                        int dayDiff = startDate.DAY_OF_WEEK - Integer.parseInt(entry.getString("3"));
+                        dayDiff = (dayDiff < 0) ? (7-dayDiff) : (dayDiff);
+
+                        startDate.add(Calendar.DAY_OF_YEAR, dayDiff);
+                        startDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(entry.getString("4")));
                         startDate.set(Calendar.MINUTE,0);
                         startDate.set(Calendar.SECOND,0);
                         startDate.set(Calendar.MILLISECOND,0);
-                        endDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(entry.getString("4")));
+
+                        endDate.add(Calendar.DAY_OF_YEAR, dayDiff);
+                        endDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(entry.getString("5")));
                         endDate.set(Calendar.MINUTE,0);
                         endDate.set(Calendar.SECOND,0);
                         endDate.set(Calendar.MILLISECOND,0);
@@ -162,8 +170,8 @@ public class ScheduleFragment extends Fragment {
                                 "", //desc
                                 new Timestamp(startDate.getTimeInMillis()), //start
                                 new Timestamp(endDate.getTimeInMillis()), //end
-                                entry.getString("5"), //venue
-                                entry.getString("6")  //lect
+                                entry.getString("6"), //venue
+                                entry.getString("7")  //lect
                         ));
                     }
                     adapter.notifyDataSetChanged();
@@ -189,13 +197,14 @@ public class ScheduleFragment extends Fragment {
         String eventQuery = "SELECT name,description,time_start,time_end,location FROM event WHERE time_start >= date('now')";
         String bookingQuery = "SELECT time_start, time_end, location FROM reservation WHERE user = 'U01' AND time_start >= date('now')";
         String classQuery = "WITH user_courses AS (SELECT course, group_id FROM registration WHERE user = 'U01')\n" +
-                "SELECT A.id, A.name, D.type, D.time_start, D.time_end, D.location, F.name FROM course A \n" +
+                "SELECT A.id, A.name, D.type, D.day, D.time_start, D.time_end, D.location, F.name FROM course A \n" +
                 "  INNER JOIN user_courses B ON B.course = A.id\n" +
                 "  INNER JOIN course_group C ON A.id = C.course AND B.group_id = C.group_id\n" +
                 "  INNER JOIN slot D ON C.slot = D.id\n" +
-                "  INNER JOIN course_instructor E ON A.id = E.course\n" +
-                "  INNER JOIN instructor F ON E.instructor = F.id\n" +
-                "  WHERE D.time_start >= date('now')";
+//                "  INNER JOIN course_instructor E ON A.id = E.course WHERE E.lead=1\n" +
+                "  INNER JOIN instructor F ON D.instructor = F.id\n"
+//                "  WHERE D.time_start >= date('now')"
+                ;
         database.clear();
         queryCount = 0;
         Database.sendQuery(getActivity(), eventQuery, eventListener, error);
